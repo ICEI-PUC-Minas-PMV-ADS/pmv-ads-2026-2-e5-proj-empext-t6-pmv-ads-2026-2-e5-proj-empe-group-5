@@ -23,11 +23,7 @@ Descreva brevemente a arquitetura definida para o projeto e as tecnologias a ser
 
 ## Project Model Canvas
 
-Deve ser desenvolvido a partir do microfundamento: Empreendedorismo e inovação.
-Colocar a imagem do modelo construído apresentando a proposta de solução.
-
-> **Links Úteis**:
-> Disponíveis em material de apoio do projeto
+<img width="896" height="636" alt="WhatsApp Image 2026-09-06 at 20 11 11" src="https://github.com/user-attachments/assets/1d8eed0e-2fa1-456c-9a24-65425ec6b38c" />
 
 ## Requisitos
 
@@ -103,8 +99,86 @@ As referências abaixo irão auxiliá-lo na geração do artefato “Diagrama de
 ## Modelo da Base de Dados
 
 # Para banco de dados relacional:
-- Apresentar o MER (Modelo Entidade-Relacionamento)
-- Apresentar o Projeto Físico da Base de Dados (estrutura das tabelas, tipos de dados, chaves primárias e estrangeiras)
+<img width="1061" height="556" alt="WhatsApp Image 2026-09-06 at 13 11 48" src="https://github.com/user-attachments/assets/87716edc-e09d-413d-8f1e-3dbba0b9650a" />
+Modelo Conceitual
+Usuario: Registra quem acessa o sistema (administradores ou técnicos). Garante acesso restrito via e-mail e senha protegida (RF01, RF05, RNF03, RN03).
+
+Cliente: Entidade que contrata os serviços e possui dados de contato e endereço (RF02, RF03).
+
+Equipamento: Aparelho de refrigeração mantido. Está obrigatoriamente vinculado a um cliente (RF04, RN01).
+
+OrdemServico: Registro central do atendimento. Une Cliente, Equipamento e Técnico responsável, controlando datas, agendamento, status e valores (RF06, RF07, RF08, RF09, RF12, RN02).
+
+RegistroServico: Detalhamento técnico gravado ao concluir o atendimento, armazenando o problema, materiais e o histórico do equipamento (RF10, RF11, RN04, RN05, RN06).
+
 # Para banco de dados NoSQL:
-Apresentar o Modelo da Base de Dados (estrutura dos documentos, coleções, ou grafos, conforme o tipo de NoSQL utilizado)
+```sql
+-- 1. TABELA DE USUÁRIOS 
+CREATE TABLE USUARIO (
+    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    str_nome VARCHAR(100) NOT NULL,
+    str_email VARCHAR(100) NOT NULL UNIQUE,
+    str_senha_hash VARCHAR(255) NOT NULL,
+    str_perfil ENUM('Administrador', 'Tecnico') NOT NULL
+);
+
+-- 2. TABELA DE CLIENTES 
+CREATE TABLE CLIENTE (
+    id_cliente INT AUTO_INCREMENT PRIMARY KEY,
+    str_nome VARCHAR(100) NOT NULL,
+    str_telefone VARCHAR(20),
+    str_email VARCHAR(100),
+    str_endereco TEXT,
+    str_observacoes TEXT
+);
+
+-- 3. TABELA DE EQUIPAMENTOS 
+CREATE TABLE EQUIPAMENTO (
+    id_equipamento INT AUTO_INCREMENT PRIMARY KEY,
+    id_cliente INT NOT NULL,
+    str_tipo VARCHAR(50) NOT NULL,
+    str_marca VARCHAR(50),
+    str_modelo VARCHAR(50),
+    str_observacoes TEXT,
+    CONSTRAINT fk_equipamento_cliente FOREIGN KEY (id_cliente) 
+        REFERENCES CLIENTE(id_cliente) 
+        ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- 4. TABELA DE ORDENS DE SERVIÇO 
+CREATE TABLE ORDEM_SERVICO (
+    id_ordem_servico INT AUTO_INCREMENT PRIMARY KEY,
+    id_cliente INT NOT NULL,
+    id_equipamento INT NOT NULL,
+    id_tecnico INT,
+    dt_abertura DATETIME DEFAULT CURRENT_TIMESTAMP,
+    dt_agendamento DATETIME,
+    str_status ENUM('Aberta', 'Agendada', 'Em andamento', 'Concluida', 'Cancelada') DEFAULT 'Aberta',
+    str_descricao_problema TEXT,
+    num_valor DECIMAL(10, 2) DEFAULT 0.00,
+    CONSTRAINT fk_os_cliente FOREIGN KEY (id_cliente) 
+        REFERENCES CLIENTE(id_cliente) 
+        ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT fk_os_equipamento FOREIGN KEY (id_equipamento) 
+        REFERENCES EQUIPAMENTO(id_equipamento) 
+        ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT fk_os_tecnico FOREIGN KEY (id_tecnico) 
+        REFERENCES USUARIO(id_usuario) 
+        ON DELETE SET NULL ON UPDATE CASCADE
+);
+
+-- 5. TABELA DE REGISTRO DE SERVIÇOS REALIZADOS 
+CREATE TABLE REGISTRO_SERVICO (
+    id_registro INT AUTO_INCREMENT PRIMARY KEY,
+    id_ordem_servico INT NOT NULL UNIQUE,
+    str_problema_encontrado TEXT NOT NULL,
+    str_servico_realizado TEXT NOT NULL,
+    str_materiais_utilizados TEXT,
+    str_observacoes TEXT,
+    dt_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_registro_os FOREIGN KEY (id_ordem_servico) 
+        REFERENCES ORDEM_SERVICO(id_ordem_servico) 
+        ON DELETE CASCADE ON UPDATE CASCADE
+);
+```
 
