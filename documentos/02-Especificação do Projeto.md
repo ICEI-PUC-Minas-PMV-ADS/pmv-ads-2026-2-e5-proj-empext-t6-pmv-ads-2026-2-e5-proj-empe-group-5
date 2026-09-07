@@ -31,53 +31,59 @@ Colocar a imagem do modelo construído apresentando a proposta de solução.
 
 ## Requisitos
 
-As tabelas que se seguem apresentam os requisitos funcionais e não funcionais que detalham o escopo do projeto. Para determinar a prioridade de requisitos, aplicar uma técnica de priorização de requisitos e detalhar como a técnica foi aplicada.
+Para definição das prioridades dos requisitos foi utilizada uma adaptação da técnica **MoSCoW**.
 
-Para mais informações, consulte os microfundamentos Fundamentos de Engenharia de Software e Engenharia de Requisitos de Software. 
+Os requisitos classificados como **ALTA** representam funcionalidades essenciais para o funcionamento da primeira versão do sistema.
 
-### Requisitos Funcionais
+Os requisitos classificados como **MÉDIA** possuem importância para melhorar a utilização e organização do sistema, mas podem ser implementados após as funcionalidades principais.
 
-|ID    | Descrição do Requisito  | Prioridade | Etapa |Responsável |Complexidade |
-|------|-----------------------------------------|----|----|----|----|
-|RF-001| Permitir que o usuário cadastre tarefas | ALTA | Etapa 1 | Maria | Alta |
-|RF-002| Emitir um relatório de tarefas no mês   | MÉDIA |Etapa 2 | João | Média | 
+Os requisitos classificados como **BAIXA** representam funcionalidades complementares que podem ser desenvolvidas posteriormente caso exista disponibilidade no projeto.
 
-### Requisitos não Funcionais
+---
 
-|ID     | Descrição do Requisito  |Prioridade |
-|-------|-------------------------|----|
-|RNF-001| O sistema deve ser responsivo para rodar em um dispositivos móvel | MÉDIA | 
-|RNF-002| Deve processar requisições do usuário em no máximo 3s |  BAIXA | 
+## Requisitos Funcionais
 
-Com base nas Histórias de Usuário, enumere os requisitos da sua solução. Classifique esses requisitos em dois grupos:
+| ID         | Descrição do Requisito                                                           | Prioridade | Etapa   | Complexidade |
+| ---------- | -------------------------------------------------------------------------------- | ---------- | ------- | ------------ |
+| **RF-001** | Permitir que o usuário realize login no sistema.                                 | ALTA       | Etapa 1 | Baixa        |
+| **RF-002** | Permitir o cadastro, edição e consulta de clientes.                              | ALTA       | Etapa 1 | Baixa        |
+| **RF-003** | Permitir o cadastro de equipamentos vinculados a um cliente.                     | ALTA       | Etapa 1 | Média        |
+| **RF-004** | Permitir o registro das instalações realizadas nos equipamentos.                 | ALTA       | Etapa 2 | Média        |
+| **RF-005** | Permitir o registro das manutenções realizadas nos equipamentos.                 | ALTA       | Etapa 2 | Média        |
+| **RF-006** | Permitir a criação e consulta de ordens de serviço.                              | ALTA       | Etapa 2 | Média        |
+| **RF-007** | Permitir a atualização do status de uma ordem de serviço.                        | ALTA       | Etapa 3 | Baixa        |
+| **RF-008** | Permitir o agendamento de atendimentos para clientes.                            | ALTA       | Etapa 3 | Média        |
+| **RF-009** | Permitir a consulta do histórico de serviços realizados em cada equipamento.     | ALTA       | Etapa 4 | Média        |
+| **RF-010** | Permitir pesquisar clientes e equipamentos cadastrados no sistema.               | MÉDIA      | Etapa 4 | Baixa        |
+| **RF-011** | Permitir a geração de relatórios dos serviços realizados em determinado período. | MÉDIA      | Etapa 4 | Média        |
+| **RF-012** | Permitir ao administrador cadastrar e gerenciar usuários do sistema.             | MÉDIA      | Etapa 5 | Média        |
 
-- [Requisitos Funcionais
- (RF)](https://pt.wikipedia.org/wiki/Requisito_funcional):
- correspondem a uma funcionalidade que deve estar presente na
-  plataforma (ex: cadastro de usuário).
-- [Requisitos Não Funcionais
-  (RNF)](https://pt.wikipedia.org/wiki/Requisito_n%C3%A3o_funcional):
-  correspondem a uma característica técnica, seja de usabilidade,
-  desempenho, confiabilidade, segurança ou outro (ex: suporte a
-  dispositivos iOS e Android).
-Lembre-se que cada requisito deve corresponder à uma e somente uma
-característica alvo da sua solução. Além disso, certifique-se de que
-todos os aspectos capturados nas Histórias de Usuário foram cobertos.
+---
 
-## Restrições
+## Requisitos Não Funcionais
+
+| ID          | Descrição do Requisito                                                                                                          | Prioridade |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| **RNF-001** | O sistema deverá possuir interface responsiva para utilização em computadores, tablets e dispositivos móveis.                   | ALTA       |
+| **RNF-002** | O sistema deverá apresentar uma interface simples e de fácil utilização.                                                        | ALTA       |
+| **RNF-003** | As principais requisições realizadas pelo usuário deverão ser processadas em até 3 segundos em condições normais de utilização. | MÉDIA      |
+| **RNF-004** | O sistema deverá exigir autenticação para acesso às informações internas.                                                       | ALTA       |
+| **RNF-005** | As senhas dos usuários deverão ser armazenadas de maneira segura e protegida.                                                   | ALTA       |
+| **RNF-006** | O sistema deverá funcionar nos principais navegadores modernos, como Google Chrome, Microsoft Edge e Mozilla Firefox.           | MÉDIA      |
+
+---
+
+# Restrições
 
 O projeto está restrito pelos itens apresentados na tabela a seguir.
 
-|ID| Restrição                                             |
-|--|-------------------------------------------------------|
-|01| O projeto deverá ser entregue até o final do semestre |
-|02| Não pode ser desenvolvido um módulo de backend        |
-
-Enumere as restrições à sua solução. Lembre-se de que as restrições geralmente limitam a solução candidata.
-
-> **Links Úteis**:
-> - [O que são Requisitos Funcionais e Requisitos Não Funcionais?](https://codificar.com.br/requisitos-funcionais-nao-funcionais/)
-> - [O que são requisitos funcionais e requisitos não funcionais?](https://analisederequisitos.com.br/requisitos-funcionais-e-requisitos-nao-funcionais-o-que-sao/)
+| ID         | Restrição                                                                                                        |
+| ---------- | ---------------------------------------------------------------------------------------------------------------- |
+| **RE-001** | O projeto deverá ser desenvolvido e entregue até o final do semestre letivo.                                     |
+| **RE-002** | O sistema será desenvolvido inicialmente para atender apenas uma empresa de refrigeração.                        |
+| **RE-003** | O desenvolvimento deverá utilizar tecnologias compatíveis com os conhecimentos adquiridos durante o curso.       |
+| **RE-004** | A primeira versão do sistema deverá priorizar as funcionalidades essenciais definidas nos requisitos funcionais. |
+| **RE-005** | Sempre que possível deverão ser utilizadas ferramentas e serviços gratuitos ou disponíveis para uso acadêmico.   |
 
 ## Diagrama de Caso de Uso
 
