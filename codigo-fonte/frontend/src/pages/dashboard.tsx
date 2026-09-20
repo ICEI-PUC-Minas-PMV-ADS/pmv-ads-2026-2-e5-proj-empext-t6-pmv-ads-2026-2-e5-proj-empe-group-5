@@ -97,6 +97,13 @@ export default function Dashboard() {
               path="/clientes"
             />
 
+            <NavItem
+             icon={<Wrench />}
+             label="Ordem de Serviço"
+             isCollapsed={isSidebarCollapsed}
+            path="/ordem-servico"
+            />
+
           </nav>
 
         </div>
