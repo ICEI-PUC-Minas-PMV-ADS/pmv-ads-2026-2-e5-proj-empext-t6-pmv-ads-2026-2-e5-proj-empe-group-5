@@ -6,24 +6,26 @@
 
 `SEMESTRE`
 
-Descrever resumidamente, em um ou dois parágrafos, o projeto que está sendo desenvolvido.
+No setor de climatização e refrigeração, a confiabilidade dos equipamentos e a rapidez no atendimento são fatores determinantes para a satisfação do cliente e a eficiência operacional. A E-Maintenance é uma empresa especializada no segmento de ar-condicionado que busca aprimorar continuamente seus processos de manutenção preventiva, corretiva e preditiva.
+
 
 ## Integrantes
 
-* Nome completo do aluno 1
-* Nome completo do aluno 2
-* Nome completo do aluno 3
-* Nome completo do aluno 4
-* Nome completo do aluno 5
-* Nome completo do aluno 6
+Arthur Veloso Moura <br>
+Fernando Cardoso Nascimento <br>
+Júlia Gonçalves Viana <br>
+Maria Aparecida Brenda de Souza <br>
+Moisés Nascimento Santos <br>
+Nicolas Oliveira Lemos <br>
 
 ## Orientador
 
-* Nome completo do professor orientador
+* José Wilson da Costa
 
 ## Parceria
 
-* Nome completo do parceiro do projeto
+*Pedro Siqueira
+
 ## Instruções de utilização
 
 Assim que a primeira versão do sistema estiver disponível, deverá complementar com as instruções de utilização. Descreva como instalar eventuais dependências e como executar a aplicação.

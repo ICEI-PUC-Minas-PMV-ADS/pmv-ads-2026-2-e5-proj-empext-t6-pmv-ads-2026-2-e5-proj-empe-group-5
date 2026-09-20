@@ -50,6 +50,18 @@ O caso de teste de sucesso deve ser identificado por CT - xxx - S
   </tr>
 </table>
 
+#### CT-005-S — Cadastro de novo agendamento
+
+| Campo | Descrição |
+|---|---|
+| **Descrição** | Verificar se o sistema permite cadastrar um novo serviço para um cliente em uma data específica. |
+| **Responsável Caso de Teste** | Maria Souza |
+| **Tipo do Teste** | Sucesso |
+| **Requisitos associados** | RF-008: O sistema deve permitir o agendamento de atendimentos para clientes. |
+| **Passos** | 1. Acessar a Agenda.<br>2. Selecionar uma data.<br>3. Informar o cliente.<br>4. Informar o serviço a ser realizado.<br>5. Informar o horário.<br>6. Selecionar o técnico responsável.<br>7. Informar o endereço.<br>8. Adicionar observações, quando necessário.<br>9. Clicar em "Salvar agendamento". |
+| **Dados de teste** | Cliente: Hospital Central.<br>Serviço: Troca do filtro do ar-condicionado.<br>Horário: 08:30.<br>Técnico: Carlos Silva.<br>Endereço: Av. Central, 250. |
+| **Critérios de êxito** | O sistema deve salvar o agendamento e exibir o cliente e o serviço na data selecionada. |
+
 #### Exemplo de Caso de Teste de Insucesso
 Os casos de testes de insucesso devem ser identificados por CT - xxx - I + sequencial de insucesso.
 Para cada etapa do projeto, criar uma seção com o nome da Etapa do projeto: Etapa 2, Etapa 3 e Etapa 4
@@ -94,6 +106,18 @@ Para cada etapa do projeto, criar uma seção com o nome da Etapa do projeto: Et
     <td>O sistema deve apresentar a mensagem de login inválido.</td>
   </tr>
 </table>
+
+#### CT-007-I — Cadastro de agendamento sem preencher campos obrigatórios
+
+| Campo | Descrição |
+|---|---|
+| **Descrição** | Verificar se o sistema impede o cadastro quando informações obrigatórias não são preenchidas. |
+| **Responsável Caso de Teste** | Maria Souza |
+| **Tipo do Teste** | Insucesso |
+| **Requisitos associados** | RF-008: O sistema deve permitir o agendamento de atendimentos para clientes. |
+| **Passos** | 1. Acessar a Agenda.<br>2. Selecionar uma data.<br>3. Não informar um ou mais campos obrigatórios.<br>4. Clicar em "Salvar agendamento". |
+| **Dados de teste** | Cliente, serviço, horário ou técnico não informado. |
+| **Critérios de êxito** | O sistema não deve salvar o agendamento e deve indicar que os campos obrigatórios precisam ser preenchidos. |
 
 ### ETAPA 3
 Criar casos de teste da etapa 3
