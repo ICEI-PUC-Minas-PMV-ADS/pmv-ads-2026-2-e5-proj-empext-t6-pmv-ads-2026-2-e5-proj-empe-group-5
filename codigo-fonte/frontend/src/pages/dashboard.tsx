@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Outlet, NavLink } from 'react-router-dom';
+import { FileText } from 'lucide-react';
 
 import {
   Home,
@@ -88,6 +89,13 @@ export default function Dashboard() {
               label="Notificações"
               isCollapsed={isSidebarCollapsed}
               path="/notificacoes"
+            />
+
+            <NavItem
+              icon={<FileText />}
+              label="Ordem de Serviço"
+              isCollapsed={isSidebarCollapsed}
+              path="/ordem-servico"
             />
 
             <NavItem

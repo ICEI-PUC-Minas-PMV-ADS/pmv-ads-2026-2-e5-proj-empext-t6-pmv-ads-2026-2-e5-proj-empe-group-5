@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import Dashboard, { DashboardHome } from './pages/dashboard';
 import { Agenda } from './pages/agenda';
+import { OrdemServico } from './pages/ordemServico';
 
 export default function App() {
   return (
@@ -17,6 +18,9 @@ export default function App() {
 
           {/* Agenda */}
           <Route path="agenda" element={<Agenda />} />
+
+          {/* Ordem de serviço*/}
+          <Route path="ordem-servico" element={<OrdemServico />} />
 
         </Route>
 
