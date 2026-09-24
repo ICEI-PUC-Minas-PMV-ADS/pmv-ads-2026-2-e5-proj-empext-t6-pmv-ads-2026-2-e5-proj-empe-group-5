@@ -56,4 +56,40 @@ export class AuthController {
       token,
     });
   }
+
+  // Atualizar dados do Perfil MEstre (Nome, E-mail ou Senha)
+async updateProfile(req: Request, res: Response) {
+  const userId = (req as any).userId; 
+  const { nome, email, senhaAtual, novaSenha } = req.body;
+
+  const usuario = await prisma.usuario.findUnique({ where: { id: userId } });
+  if (!usuario) {
+    return res.status(404).json({ error: 'Usuário não encontrado.' });
+  }
+
+  // Se for alterar a senha valida a senha atual primeiro
+  let senhaHash = usuario.senha;
+  if (novaSenha) {
+    if (!senhaAtual) {
+      return res.status(400).json({ error: 'Informe a senha atual para definir uma nova.' });
+    }
+    const senhaValida = await bcrypt.compare(senhaAtual, usuario.senha);
+    if (!senhaValida) {
+      return res.status(400).json({ error: 'Senha atual incorreta.' });
+    }
+    senhaHash = await bcrypt.hash(novaSenha, 8);
+  }
+
+  const usuarioAtualizado = await prisma.usuario.update({
+    where: { id: userId },
+    data: {
+      nome: nome || usuario.nome,
+      email: email || usuario.email,
+      senha: senhaHash,
+    },
+    select: { id: true, nome: true, email: true, role: true },
+  });
+
+  return res.json(usuarioAtualizado);
+}
 }

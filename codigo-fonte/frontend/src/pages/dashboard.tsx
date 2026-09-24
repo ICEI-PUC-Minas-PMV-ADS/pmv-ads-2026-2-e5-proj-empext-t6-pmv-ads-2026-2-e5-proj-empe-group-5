@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Outlet, NavLink } from 'react-router-dom';
 
 import {
@@ -14,6 +14,25 @@ import {
   Clock,
   Wind
 } from 'lucide-react';
+
+/* =========================================================
+   INTERFACE DOS DADOS DA DASHBOARD
+   ========================================================= */
+interface DashboardStats {
+  totalClientes: number;
+  totalOS: number;
+  osPendentes: number;
+  osEmAndamento: number;
+  osConcluidas: number;
+  ultimasOS: Array<{
+    id: string;
+    status: string;
+    dataAgendada?: string;
+    cliente: { nome: string };
+    tecnico?: { nome: string };
+    equipamento?: { nome: string; modelo?: string };
+  }>;
+}
 
 export default function Dashboard() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -101,7 +120,7 @@ export default function Dashboard() {
              icon={<Wrench />}
              label="Ordem de Serviço"
              isCollapsed={isSidebarCollapsed}
-            path="/ordem-servico"
+             path="/ordem-servico"
             />
 
           </nav>
@@ -119,16 +138,7 @@ export default function Dashboard() {
 
       {/* ÁREA PRINCIPAL */}
       <main className="flex-1 overflow-y-auto p-8">
-
-        {/* 
-          O Outlet é onde o React Router vai colocar
-          o conteúdo da página atual.
-          
-          "/"      → DashboardHome
-          "/agenda" → Agenda
-        */}
         <Outlet />
-
       </main>
 
     </div>
@@ -137,10 +147,38 @@ export default function Dashboard() {
 
 
 /* =========================================================
-   CONTEÚDO PRINCIPAL DO DASHBOARD
+   CONTEÚDO PRINCIPAL DO DASHBOARD (INTEGRADO COM A API)
    ========================================================= */
 
 export function DashboardHome() {
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchDashboardData() {
+      try {
+        const token = localStorage.getItem('@crm:token');
+
+        const response = await fetch('http://localhost:3333/api/dashboard/stats', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setStats(data);
+        }
+      } catch (error) {
+        console.error("Erro ao carregar dados da Dashboard:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchDashboardData();
+  }, []);
+
   return (
     <>
 
@@ -163,25 +201,25 @@ export function DashboardHome() {
 
         <StatCard
           title="Clientes Ativos"
-          value="128"
+          value={loading ? "..." : String(stats?.totalClientes ?? 0)}
           icon={<Users className="text-sky-600" />}
         />
 
         <StatCard
           title="OS Em Andamento"
-          value="14"
+          value={loading ? "..." : String(stats?.osEmAndamento ?? 0)}
           icon={<Clock className="text-amber-500" />}
         />
 
         <StatCard
           title="Serviços Concluídos"
-          value="86"
+          value={loading ? "..." : String(stats?.osConcluidas ?? 0)}
           icon={<CheckCircle className="text-emerald-500" />}
         />
 
         <StatCard
-          title="Equipamentos Monitorados"
-          value="412"
+          title="Total de OS"
+          value={loading ? "..." : String(stats?.totalOS ?? 0)}
           icon={<Wrench className="text-sky-600" />}
         />
 
@@ -226,20 +264,7 @@ export function DashboardHome() {
 
           <div className="flex items-end justify-between h-40 gap-2 px-2 border-b border-slate-200 pb-2">
 
-            {[
-              65,
-              40,
-              75,
-              45,
-              90,
-              55,
-              70,
-              85,
-              50,
-              60,
-              95,
-              80
-            ].map((height, index) => (
+            {[65, 40, 75, 45, 90, 55, 70, 85, 50, 60, 95, 80].map((height, index) => (
 
               <div
                 key={index}
@@ -255,18 +280,8 @@ export function DashboardHome() {
 
                   {
                     [
-                      'Jan',
-                      'Fev',
-                      'Mar',
-                      'Abr',
-                      'Mai',
-                      'Jun',
-                      'Jul',
-                      'Ago',
-                      'Set',
-                      'Out',
-                      'Nov',
-                      'Dez'
+                      'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
+                      'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'
                     ][index]
                   }
 
@@ -283,7 +298,7 @@ export function DashboardHome() {
       </section>
 
 
-      {/* PRÓXIMOS SERVIÇOS */}
+      {/* PRÓXIMOS SERVIÇOS / ÚLTIMAS OS */}
       <section className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
 
         <h3 className="text-base font-semibold text-slate-700 mb-4">
@@ -298,91 +313,65 @@ export function DashboardHome() {
 
               <tr className="border-b border-slate-200 text-xs text-slate-400 uppercase">
 
-                <th className="py-3 px-4">
-                  Cliente
-                </th>
-
-                <th className="py-3 px-4">
-                  Equipamento
-                </th>
-
-                <th className="py-3 px-4">
-                  Data/Hora
-                </th>
-
-                <th className="py-3 px-4">
-                  Técnico
-                </th>
-
-                <th className="py-3 px-4">
-                  Status
-                </th>
+                <th className="py-3 px-4">Cliente</th>
+                <th className="py-3 px-4">Equipamento</th>
+                <th className="py-3 px-4">Data/Hora</th>
+                <th className="py-3 px-4">Técnico</th>
+                <th className="py-3 px-4">Status</th>
 
               </tr>
 
             </thead>
 
-
             <tbody className="text-sm divide-y divide-slate-100">
 
-              {/* SERVIÇO 1 */}
-              <tr>
+              {loading ? (
+                <tr>
+                  <td colSpan={5} className="py-4 text-center text-slate-400">
+                    Carregando serviços...
+                  </td>
+                </tr>
+              ) : stats?.ultimasOS.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="py-4 text-center text-slate-400">
+                    Nenhuma Ordem de Serviço cadastrada.
+                  </td>
+                </tr>
+              ) : (
+                stats?.ultimasOS.map((os) => (
+                  <tr key={os.id}>
 
-                <td className="py-3 px-4 font-medium text-slate-800">
-                  Hospital Central
-                </td>
+                    <td className="py-3 px-4 font-medium text-slate-800">
+                      {os.cliente?.nome || 'Cliente não informado'}
+                    </td>
 
-                <td className="py-3 px-4 text-slate-600">
-                  philco 9kbtu
-                </td>
+                    <td className="py-3 px-4 text-slate-600">
+                      {os.equipamento?.nome || 'Ar Condicionado'}
+                    </td>
 
-                <td className="py-3 px-4 text-slate-600">
-                  Amanhã - 08:30
-                </td>
+                    <td className="py-3 px-4 text-slate-600">
+                      {os.dataAgendada ? new Date(os.dataAgendada).toLocaleDateString('pt-BR') : 'A definir'}
+                    </td>
 
-                <td className="py-3 px-4 text-slate-600">
-                  Carlos Silva
-                </td>
+                    <td className="py-3 px-4 text-slate-600">
+                      {os.tecnico?.nome || 'Não atribuído'}
+                    </td>
 
-                <td className="py-3 px-4">
+                    <td className="py-3 px-4">
+                      <span className={`px-2.5 py-1 text-xs font-semibold rounded-full ${
+                        os.status === 'CONCLUIDA' 
+                          ? 'bg-emerald-50 text-emerald-600' 
+                          : os.status === 'EM_ANDAMENTO'
+                          ? 'bg-sky-50 text-sky-600'
+                          : 'bg-amber-50 text-amber-600'
+                      }`}>
+                        {os.status}
+                      </span>
+                    </td>
 
-                  <span className="px-2.5 py-1 text-xs font-semibold bg-amber-50 text-amber-600 rounded-full">
-                    Agendado
-                  </span>
-
-                </td>
-
-              </tr>
-
-
-              {/* SERVIÇO 2 */}
-              <tr>
-
-                <td className="py-3 px-4 font-medium text-slate-800">
-                  Shopping Metropolitano
-                </td>
-
-                <td className="py-3 px-4 text-slate-600">
-                  Split turbo 24k BTU
-                </td>
-
-                <td className="py-3 px-4 text-slate-600">
-                  Amanhã - 14:00
-                </td>
-
-                <td className="py-3 px-4 text-slate-600">
-                  Roberto Alves
-                </td>
-
-                <td className="py-3 px-4">
-
-                  <span className="px-2.5 py-1 text-xs font-semibold bg-sky-50 text-sky-600 rounded-full">
-                    Em rota
-                  </span>
-
-                </td>
-
-              </tr>
+                  </tr>
+                ))
+              )}
 
             </tbody>
 
