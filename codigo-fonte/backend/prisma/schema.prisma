@@ -1,0 +1,90 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Perfis de Acesso
+enum Role {
+  ADMIN
+  TECNICO
+}
+
+// Status da Ordem de Serviço
+enum StatusOS {
+  PENDENTE
+  EM_ANDAMENTO
+  CONCLUIDO
+  CANCELADO
+}
+
+// Tipo de Manutenção
+enum TipoManutencao {
+  PREVENTIVA
+  CORRETIVA
+}
+
+// Modelo de Usuários
+model Usuario {
+  id        String   @id @default(uuid())
+  nome      String
+  email     String   @unique
+  senha     String
+  role      Role     @default(TECNICO)
+  criadoEm  DateTime @default(now())
+
+  ordensServico OrdemServico[]
+}
+
+// Modelo de Clientes
+model Cliente {
+  id        String   @id @default(uuid())
+  nome      String
+  email     String
+  telefone  String
+  endereco  String
+  cnpjCpf   String   @unique
+  criadoEm  DateTime @default(now())
+
+  equipamentos  Equipamento[]
+  ordensServico OrdemServico[]
+}
+
+// Modelo de Equipamentos
+model Equipamento {
+  id            String   @id @default(uuid())
+  nome          String
+  marca         String
+  modelo        String
+  localizacao   String
+  capacidadeBtu Int
+  clienteId     String
+  cliente       Cliente  @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+  criadoEm      DateTime @default(now())
+
+  ordensServico OrdemServico[]
+}
+
+// Modelo de Ordens de Serviço
+model OrdemServico {
+  id            String         @id @default(uuid())
+  descricao     String
+  tipo          TipoManutencao @default(PREVENTIVA)
+  status        StatusOS       @default(PENDENTE)
+  dataAgendada  DateTime
+  concluidoEm   DateTime?
+
+  clienteId     String
+  cliente       Cliente        @relation(fields: [clienteId], references: [id])
+
+  equipamentoId String
+  equipamento   Equipamento    @relation(fields: [equipamentoId], references: [id])
+
+  tecnicoId     String?
+  tecnico       Usuario?       @relation(fields: [tecnicoId], references: [id])
+
+  criadoEm      DateTime       @default(now())
+}
