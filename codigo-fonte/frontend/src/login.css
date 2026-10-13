@@ -1,0 +1,141 @@
+
+.login-pagina {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: linear-gradient(135deg, #082f49, #1fa2d6);
+  font-family: Arial, sans-serif;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 430px;
+  padding: 38px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+  text-align: center;
+}
+
+.login-logo {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background: #e0f2fe;
+  color: #0284c7;
+}
+
+.login-card h1 {
+  margin: 0;
+  color: #082f49;
+  font-size: 27px;
+  font-weight: 700;
+}
+
+.login-subtitulo {
+  margin: 10px 0 32px;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.login-card h2 {
+  margin: 0;
+  color: #082f49;
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.login-descricao {
+  margin: 8px 0 26px;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.login-card form {
+  text-align: left;
+}
+
+.login-card label {
+  display: block;
+  margin: 15px 0 7px;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.login-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 13px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  color: #94a3b8;
+}
+
+.login-input:focus-within {
+  border-color: #1fa2d6;
+  box-shadow: 0 0 0 3px rgba(31, 162, 214, 0.12);
+}
+
+.login-input input {
+  width: 100%;
+  padding: 13px 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #0f172a;
+  font-size: 14px;
+}
+
+.login-botao {
+  width: 100%;
+  margin-top: 25px;
+  padding: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border: none;
+  border-radius: 8px;
+  background: #1fa2d6;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.login-botao:hover {
+  background: #178dbd;
+}
+
+.login-botao:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.login-erro {
+  margin-top: 15px;
+  color: #dc2626;
+  font-size: 13px;
+  text-align: center;
+}
+
+.login-rodape {
+  margin: 28px 0 0;
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+@media (max-width: 480px) {
+  .login-card {
+    padding: 28px 22px;
+  }
+}
