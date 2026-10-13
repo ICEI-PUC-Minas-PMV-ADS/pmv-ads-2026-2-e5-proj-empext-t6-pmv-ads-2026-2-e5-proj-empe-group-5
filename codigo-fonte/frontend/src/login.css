@@ -134,6 +134,35 @@
   font-size: 12px;
 }
 
+.login-link {
+  margin: 22px 0 0;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.login-link a {
+  color: #0369a1;
+  font-weight: 600;
+}
+
+a.login-botao {
+  box-sizing: border-box;
+  text-decoration: none;
+}
+
+.cadastro-ajuda {
+  margin: 6px 0 0;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.cadastro-sucesso {
+  margin-top: 20px;
+  color: #166534;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
 @media (max-width: 480px) {
   .login-card {
     padding: 28px 22px;

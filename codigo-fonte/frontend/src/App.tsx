@@ -12,6 +12,7 @@ import { Agenda } from './pages/agenda';
 import { OrdemServico } from './pages/ordemServico';
 import { CadastroClientes } from './pages/cadastroClientes';
 import { Login } from './pages/login';
+import { CadastroUsuario } from './pages/cadastroUsuario';
 
 // Verifica se existe uma sessão salva
 function RotaProtegida() {
@@ -31,6 +32,7 @@ export default function App() {
 
         {/* Página de Login */}
         <Route path="/login" element={<Login />} />
+        <Route path="/cadastro" element={<CadastroUsuario />} />
 
         {/* Páginas que exigem login */}
         <Route element={<RotaProtegida />}>

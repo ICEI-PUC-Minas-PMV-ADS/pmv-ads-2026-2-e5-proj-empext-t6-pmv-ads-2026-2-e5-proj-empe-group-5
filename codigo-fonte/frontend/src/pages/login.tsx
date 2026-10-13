@@ -1,6 +1,6 @@
 
 import { useState, type FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Wind, Mail, Lock, LogIn } from 'lucide-react';
 import '../login.css';
 
@@ -126,6 +126,10 @@ export function Login() {
             {carregando ? 'Entrando...' : 'Entrar'}
           </button>
         </form>
+
+        <p className="login-link">
+          Ainda não tem conta? <Link to="/cadastro">Cadastre-se</Link>
+        </p>
 
         <p className="login-rodape">
           PCM & Climatização v1.0
