@@ -12,7 +12,8 @@ import {
   Wrench,
   CheckCircle,
   Clock,
-  Wind
+  Wind,
+  FileText
 } from 'lucide-react';
 
 /* =========================================================
@@ -117,11 +118,18 @@ export default function Dashboard() {
             />
 
             <NavItem
+              icon={<FileText />}
+              label="Relatórios"
+              isCollapsed={isSidebarCollapsed}
+              path="/relatorios"/>
+
+            <NavItem
              icon={<Wrench />}
              label="Ordem de Serviço"
              isCollapsed={isSidebarCollapsed}
              path="/ordem-servico"
             />
+
 
           </nav>
 

@@ -88,3 +88,18 @@ model OrdemServico {
 
   criadoEm      DateTime       @default(now())
 }
+
+// Modelo de Relatórios
+model Relatorio {
+  id          String   @id @default(uuid())
+  descricao   String
+  dataServico DateTime
+  cliente     String
+  funcionario String
+  equipamento String
+  endereco    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("relatorios")
+}

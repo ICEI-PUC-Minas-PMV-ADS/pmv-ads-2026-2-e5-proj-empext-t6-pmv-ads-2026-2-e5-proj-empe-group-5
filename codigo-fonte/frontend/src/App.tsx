@@ -4,6 +4,8 @@ import Dashboard, { DashboardHome } from './pages/dashboard';
 import { Agenda } from './pages/agenda';
 import { OrdemServico } from './pages/ordemServico';
 import { CadastroClientes } from './pages/cadastroClientes';
+import { Relatorios } from './pages/relatorios';
+import { CriarRelatorio } from './pages/criarRelatorio';
 
 export default function App() {
   return (
@@ -25,6 +27,11 @@ export default function App() {
 
           {/* Cadastro de Clientes */}
           <Route path="clientes" element={<CadastroClientes />} />
+
+          <Route path="relatorios" element={<Relatorios />} />
+
+          <Route path="relatorios/criar" element={<CriarRelatorio />}
+          />
 
         </Route>
 
