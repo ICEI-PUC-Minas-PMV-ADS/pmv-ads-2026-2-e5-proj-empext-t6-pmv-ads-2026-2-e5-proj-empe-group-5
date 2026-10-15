@@ -486,4 +486,102 @@
     width: 100%;
     justify-content: center;
   }
+  
+}
+
+
+/* =========================================
+   CADASTRO RÁPIDO
+   CLIENTES, EQUIPAMENTOS E TÉCNICOS
+========================================= */
+
+.os-campo-com-botao {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  width: 100%;
+}
+
+.os-campo-com-botao select {
+  flex: 1;
+  min-width: 0;
+}
+
+.os-botao-novo-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 10px 14px;
+  border: 1px solid #1fa2d6;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #1689bb;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.os-botao-novo-item:hover {
+  background: #eff9fd;
+}
+
+.os-botao-novo-item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.os-botao-salvar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =========================================
+   RESPONSIVIDADE DO CADASTRO RÁPIDO
+========================================= */
+
+@media (max-width: 650px) {
+  .os-campo-com-botao {
+    flex-direction: column;
+  }
+
+  .os-botao-novo-item {
+    width: 100%;
+    min-height: 40px;
+  }
+}
+
+
+/* Botões de editar e excluir OS */
+
+.os-acoes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.os-editar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 7px;
+  background: #e0f2fe;
+  color: #0284c7;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.os-editar:hover {
+  background: #bae6fd;
+}
+
+.os-editar:focus-visible {
+  outline: 2px solid #0284c7;
+  outline-offset: 2px;
 }
