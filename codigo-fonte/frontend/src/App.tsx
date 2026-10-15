@@ -1,4 +1,3 @@
-
 import {
   BrowserRouter,
   Routes,
@@ -13,6 +12,7 @@ import { OrdemServico } from './pages/ordemServico';
 import { CadastroClientes } from './pages/cadastroClientes';
 import { Login } from './pages/login';
 import { CadastroUsuario } from './pages/cadastroUsuario';
+import { Notificacoes } from './pages/notificacoes';
 
 // Verifica se existe uma sessão salva
 function RotaProtegida() {
@@ -30,7 +30,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
 
-        {/* Página de Login */}
+        {/* Página de Login e Cadastro */}
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<CadastroUsuario />} />
 
@@ -50,6 +50,12 @@ export default function App() {
             <Route
               path="clientes"
               element={<CadastroClientes />}
+            />
+
+            {/* Rota da Central de Notificações */}
+            <Route
+              path="notificacoes"
+              element={<Notificacoes />}
             />
 
           </Route>

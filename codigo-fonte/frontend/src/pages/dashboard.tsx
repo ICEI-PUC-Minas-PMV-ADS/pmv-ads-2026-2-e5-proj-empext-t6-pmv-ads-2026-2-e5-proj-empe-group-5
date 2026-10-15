@@ -32,7 +32,8 @@ interface DashboardStats {
     id: string;
     status: string;
     dataAgendada?: string;
-    cliente: { nome: string };
+    criadoEm?: string;
+    cliente?: { nome: string } | null;
     tecnico?: { nome: string } | null;
     equipamento?: {
       nome: string;

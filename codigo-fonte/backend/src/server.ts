@@ -65,13 +65,17 @@ app.put('/api/auth/profile', (req, res) =>
 );
 
 // ==========================================
-// DASHBOARD
+// DASHBOARD & NOTIFICAÇÕES
 // ==========================================
 
 app.get('/api/dashboard/stats', (req, res) =>
   dashboardController.getStats(req, res)
 );
 
+
+app.get('/api/notificacoes', (req, res) =>
+  dashboardController.getNotificacoes(req, res)
+);
 // ==========================================
 // CLIENTES
 // ==========================================
