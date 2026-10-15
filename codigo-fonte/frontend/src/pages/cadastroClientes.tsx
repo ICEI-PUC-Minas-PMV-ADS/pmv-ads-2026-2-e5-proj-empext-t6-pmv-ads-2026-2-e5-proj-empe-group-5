@@ -1,74 +1,123 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../cadastroClientes.css';
 
+const API_URL = 'http://localhost:3333';
+
 interface Cliente {
-  id: number;
+  id: string;
   nome: string;
   telefone: string;
   email: string;
   endereco: string;
-  equipamento: string;
-  servicos: string[];
+  cnpjCpf: string;
+  equipamentos?: any[];
+  servicos?: string[];
 }
 
 export function CadastroClientes() {
   const [modoCadastro, setModoCadastro] = useState(false);
-  const [cardExpandido, setCardExpandido] = useState(false);
-  const [mostrarModalExclusao, setMostrarModalExclusao] = useState(false);
-
-  // Lista de clientes com um registro de exemplo
-  const [clientes, setClientes] = useState<Cliente[]>([
-    {
-      id: 1,
-      nome: 'Marcia Andrade',
-      telefone: '(31)99999999',
-      email: 'Marcia@gmail.com',
-      endereco: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-      equipamento: 'ar com 9000 btus',
-      servicos: ['troca de filtro', '', '', '', '']
-    }
-  ]);
+  const [cardExpandido, setCardExpandido] = useState<string | null>(null);
+  const [mostrarModalExclusao, setMostrarModalExclusao] = useState<string | null>(null);
+  const [termoBusca, setTermoBusca] = useState('');
+  const [clientes, setClientes] = useState<Cliente[]>([]);
 
   // Estado do Formulário
   const [formData, setFormData] = useState({
     nome: '',
     sobrenome: '',
     email: '',
-    telefone: ''
+    telefone: '',
+    endereco: '',
+    cnpjCpf: ''
   });
+
+  // 1. CARREGAR CLIENTES DO BANCO AO ABRIR A TELA
+  useEffect(() => {
+    carregarClientes();
+  }, []);
+
+  const carregarClientes = async () => {
+    try {
+      const response = await fetch(`${API_URL}/clientes`);
+      if (response.ok) {
+        const data = await response.json();
+        setClientes(data);
+      }
+    } catch (erro) {
+      console.error('Erro ao buscar clientes da API:', erro);
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // 2. ENVIAR NOVO CLIENTE PARA O BACKEND
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const novoCliente: Cliente = {
-      id: Date.now(),
-      nome: `${formData.nome} ${formData.sobrenome}`,
-      telefone: formData.telefone,
-      email: formData.email,
-      endereco: 'Endereço não informado',
-      equipamento: 'Sem equipamento registrado',
-      servicos: ['', '', '', '', '']
-    };
+    try {
+      const novoClienteData = {
+        nome: `${formData.nome} ${formData.sobrenome}`.trim(),
+        email: formData.email,
+        telefone: formData.telefone,
+        endereco: formData.endereco || 'Endereço não informado',
+        cnpjCpf: formData.cnpjCpf || Date.now().toString()
+      };
 
-    setClientes([...clientes, novoCliente]);
-    alert('Cliente cadastrado com sucesso!');
-    setModoCadastro(false);
-    setFormData({ nome: '', sobrenome: '', email: '', telefone: '' });
+      const response = await fetch(`${API_URL}/clientes`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(novoClienteData)
+      });
+
+      if (response.ok) {
+        const novoCliente = await response.json();
+        setClientes([...clientes, novoCliente]);
+        setModoCadastro(false);
+        setFormData({ nome: '', sobrenome: '', email: '', telefone: '', endereco: '', cnpjCpf: '' });
+        alert('Cliente cadastrado com sucesso!');
+      } else {
+        alert('Erro ao cadastrar cliente no servidor.');
+      }
+    } catch (erro) {
+      console.error('Erro ao cadastrar cliente:', erro);
+      alert('Erro de conexão com o servidor.');
+    }
   };
 
-  const confirmarExclusao = () => {
-    setClientes([]);
-    setMostrarModalExclusao(false);
+  // 3. EXCLUIR CLIENTE DO BANCO DE DADOS
+  const confirmarExclusao = async () => {
+    if (mostrarModalExclusao) {
+      try {
+        const response = await fetch(`${API_URL}/clientes/${mostrarModalExclusao}`, {
+          method: 'DELETE'
+        });
+
+        if (response.ok) {
+          setClientes(clientes.filter((c) => c.id !== mostrarModalExclusao));
+          setMostrarModalExclusao(null);
+        } else {
+          alert('Erro ao excluir cliente.');
+        }
+      } catch (erro) {
+        console.error('Erro ao excluir cliente:', erro);
+        alert('Erro de conexão com o servidor.');
+      }
+    }
   };
+
+  const clientesFiltrados = clientes.filter(
+    (c) =>
+      c.nome.toLowerCase().includes(termoBusca.toLowerCase()) ||
+      c.email.toLowerCase().includes(termoBusca.toLowerCase()) ||
+      c.telefone.includes(termoBusca)
+  );
 
   return (
     <div className="clientes-container">
       {modoCadastro ? (
-        <div>
+        <div className="cadastro-wrapper">
           <button className="btn-voltar" onClick={() => setModoCadastro(false)}>
             ← Voltar para a lista
           </button>
@@ -81,7 +130,7 @@ export function CadastroClientes() {
                 type="text"
                 id="nome"
                 name="nome"
-                placeholder="digite aqui ..."
+                placeholder="Digite o nome..."
                 value={formData.nome}
                 onChange={handleChange}
                 required
@@ -94,7 +143,7 @@ export function CadastroClientes() {
                 type="text"
                 id="sobrenome"
                 name="sobrenome"
-                placeholder="digite aqui ..."
+                placeholder="Digite o sobrenome..."
                 value={formData.sobrenome}
                 onChange={handleChange}
                 required
@@ -107,7 +156,7 @@ export function CadastroClientes() {
                 type="email"
                 id="email"
                 name="email"
-                placeholder="digite aqui ..."
+                placeholder="exemplo@email.com"
                 value={formData.email}
                 onChange={handleChange}
                 required
@@ -120,94 +169,131 @@ export function CadastroClientes() {
                 type="tel"
                 id="telefone"
                 name="telefone"
-                placeholder="digite aqui ..."
+                placeholder="(31) 99999-9999"
                 value={formData.telefone}
                 onChange={handleChange}
                 required
               />
             </div>
 
-            <div style={{ textAlign: 'center', marginTop: '20px' }}>
-              <button type="submit" className="btn-criar-cliente">
-                Registrar-se
+            <div className="form-group">
+              <label htmlFor="endereco">Endereço</label>
+              <input
+                type="text"
+                id="endereco"
+                name="endereco"
+                placeholder="Rua, Número, Bairro..."
+                value={formData.endereco}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="cnpjCpf">CPF / CNPJ</label>
+              <input
+                type="text"
+                id="cnpjCpf"
+                name="cnpjCpf"
+                placeholder="000.000.000-00"
+                value={formData.cnpjCpf}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="form-actions">
+              <button type="submit" className="btn-salvar">
+                Salvar Cliente
               </button>
             </div>
           </form>
         </div>
       ) : (
-        <div>
+        <div className="lista-wrapper">
           <h1 className="titulo-pagina">Clientes</h1>
 
-          <div className="clientes-header">
+          <div className="clientes-toolbar">
             <button className="btn-criar-cliente" onClick={() => setModoCadastro(true)}>
-              criar<br />cliente
+              <span className="icon-plus">+</span> criar cliente
             </button>
 
-            <div className="pesquisa-box">
-              🔍 <span>pesquisar</span>
+            <div className="busca-container">
+              <span className="busca-icon">🔍</span>
+              <input
+                type="text"
+                className="busca-input"
+                placeholder="pesquisar..."
+                value={termoBusca}
+                onChange={(e) => setTermoBusca(e.target.value)}
+              />
             </div>
           </div>
 
-          {clientes.map((cliente) => (
-            <div key={cliente.id} className="cliente-card">
-              <div className="card-header-info">
-                <span className="icon-user">👤</span>
-                <div className="cliente-detalhes">
-                  <div className="cliente-nome">{cliente.nome}</div>
-                  <div className="cliente-contato">
-                    <span>tel:{cliente.telefone}</span>
-                    <span>email:{cliente.email}</span>
-                  </div>
-                </div>
+          <div className="cards-lista">
+            {clientesFiltrados.map((cliente) => {
+              const isExpanded = cardExpandido === cliente.id;
 
-                <div className="card-acoes">
-                  <button className="btn-icon">✏️</button>
-                  <button className="btn-icon" onClick={() => setMostrarModalExclusao(true)}>
-                    🗑️
+              return (
+                <div key={cliente.id} className="cliente-card">
+                  <div className="card-header-info">
+                    <div className="avatar-circle">👤</div>
+
+                    <div className="cliente-detalhes">
+                      <h3 className="cliente-nome">{cliente.nome}</h3>
+                      <div className="cliente-contato">
+                        <span>📞 {cliente.telefone}</span>
+                        <span>✉️ {cliente.email}</span>
+                      </div>
+                    </div>
+
+                    <div className="card-acoes">
+                      <button className="btn-acao btn-editar" title="Editar">
+                        ✏️
+                      </button>
+                      <button
+                        className="btn-acao btn-deletar"
+                        title="Excluir"
+                        onClick={() => setMostrarModalExclusao(cliente.id)}
+                      >
+                        🗑️
+                      </button>
+                    </div>
+                  </div>
+
+                  {isExpanded && (
+                    <div className="card-expandido">
+                      <div className="info-linha">
+                        <strong>Endereço:</strong> {cliente.endereco}
+                      </div>
+                      <div className="info-linha">
+                        <strong>CPF/CNPJ:</strong> {cliente.cnpjCpf}
+                      </div>
+                    </div>
+                  )}
+
+                  <button
+                    className="btn-expandir"
+                    onClick={() => setCardExpandido(isExpanded ? null : cliente.id)}
+                  >
+                    {isExpanded ? '▲' : '▼'}
                   </button>
                 </div>
-              </div>
-
-              {cardExpandido && (
-                <div className="card-expandido">
-                  <div><strong>endereço:</strong> {cliente.endereco}</div>
-                  <div className="equipamento-info">
-                    <strong>equipamento do cliente:</strong> {cliente.equipamento}
-                  </div>
-
-                  <div>
-                    <strong>Serviços já feitos:</strong>
-                    <table className="tabela-servicos">
-                      <tbody>
-                        {cliente.servicos.map((servico, index) => (
-                          <tr key={index}>
-                            <td>{servico}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              )}
-
-              <button className="btn-expandir" onClick={() => setCardExpandido(!cardExpandido)}>
-                {cardExpandido ? '▲' : '∨'}
-              </button>
-            </div>
-          ))}
+              );
+            })}
+          </div>
         </div>
       )}
 
       {mostrarModalExclusao && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <h3>excluir cliente?</h3>
+            <h3>Deseja excluir este cliente?</h3>
+            <p>Esta ação não poderá ser desfeita.</p>
             <div className="modal-botoes">
-              <button className="btn-modal-nao" onClick={() => setMostrarModalExclusao(false)}>
-                não
+              <button className="btn-modal-cancelar" onClick={() => setMostrarModalExclusao(null)}>
+                Cancelar
               </button>
-              <button className="btn-modal-sim" onClick={confirmarExclusao}>
-                sim
+              <button className="btn-modal-excluir" onClick={confirmarExclusao}>
+                Excluir
               </button>
             </div>
           </div>

@@ -1,8 +1,8 @@
 # TÍTULO DO PROJETO
 
-`CURSO`
+`Análise e desenvolvimento de sistemas`
 
-`DISCIPLINA`
+`Desenvolvimento de um sistema sociotécnico inovador `
 
 `SEMESTRE`
 
