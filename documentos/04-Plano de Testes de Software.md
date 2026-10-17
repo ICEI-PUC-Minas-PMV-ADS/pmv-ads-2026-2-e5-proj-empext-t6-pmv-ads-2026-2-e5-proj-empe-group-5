@@ -62,5 +62,60 @@ Apresente os casos de testes utilizados na realização da verificação e valid
 ### ETAPA 3
 Criar casos de teste da etapa 3
 
+####  Caso de Teste de Sucesso
+
+#### CT-001-S — Visualização e Carregamento de Métricas na Dashboard
+
+| Campo | Descrição |
+|---|---|
+| **Descrição** | Este caso de teste verifica se a página Dashboard carrega e exibe corretamente os indicadores gerais e a lista de serviços recentes ao aceder com um utilizador autenticado. |
+| **Responsável Caso de Teste** | Nicolas Oliveira |
+| **Tipo do Teste** | Sucesso |
+| **Requisitos associados** | RF-002: Permitir o cadastro, edição e consulta de clientes. RF-006: Permitir a criação e consulta de ordens de serviço. RNF-003: As principais requisições deverão ser processadas em até 3 segundos. |
+| **Passos** | 1. Fazer login no sistema com credenciais válidas. 2. Ser redirecionado ou navegar para a página principal . 3. Aguardar o carregamento das requisições de API .4. Verificar a exibição dos cards informativos e da tabela de agendamentos. |
+| **Dados de teste** | - Token de Autenticação: Token JWT válido salvo no localStorage (@crm:token) - Utilizador: admin@empresa.com - Dados na Base de Dados: Múltiplas OS com status CONCLUIDO, EM_ANDAMENTO e clientes ativos. |
+| **Critérios de êxito** | O sistema deve responder com status 200 OK na API, remover os estados de carregamento (...) e exibir os contadores atualizados e a lista dos próximos serviços sem erros na consola. |
+
+#### CT-003-S — Visualização de Alertas e Manutenções Preventivas nas Notificações
+
+| Campo | Descrição |
+|---|---|
+| **Descrição** | Este caso de teste verifica se a Central de Notificações lista corretamente as ordens de serviço pendentes/em andamento e gera os alertas de preventiva para clientes com mais de 6 meses sem revisão. |
+| **Responsável Caso de Teste** | Nicolas Oliveira |
+| **Tipo do Teste** | Sucesso |
+| **Requisitos associados** | RF-005: Permitir o registro das manutenções realizadas nos equipamentos. RF-008: Permitir o agendamento de atendimentos para clientes. |
+| **Passos** | 1. Fazer login no sistema com credenciais válidas. 2. Clicar no item "Notificações" no menu lateral. 3. Aguardar a resposta da requisição de API . 4. Verificar a exibição dos cards de serviços pendentes e da tabela de oportunidades de manutenção preventiva. |
+| **Dados de teste** |- Token de Autenticação: Token JWT válido salvo no localStorage (@crm:token) - Cliente de Teste: Cliente com última revisão realizada há mais de 180 dias (>6 meses). - Ordens de Serviço: Registros gravados com status PENDENTE e EM_ANDAMENTO. |
+| **Critérios de êxito** | O servidor deve responder com status 200 OK na API e a interface deve renderizar os cards das ordens ativas e destacar os clientes em atraso com a badge "Revisão Recomendada" e os dados de contacto. |
+
+####  Caso de Teste de Insucesso
+
+#### CT-002-I — Falha de Conexão no Carregamento da Dashboard
+
+| Campo | Descrição |
+|---|---|
+| **Descrição** | Este caso de teste verifica se o sistema trata adequadamente uma falha de conexão ou erro interno no servidor (500) ao tentar carregar os dados da Dashboard sem travar a interface. |
+| **Responsável Caso de Teste** | Nicolas Oliveira |
+| **Tipo do Teste** | Insucesso |
+| **Requisitos associados** | RNF-002: O sistema deverá apresentar uma interface simples e de fácil utilização. RNF-004: O sistema deverá exigir autenticação para acesso às informações internas. |
+| **Passos** | 1. Estar autenticado na aplicação com um token válido. 2. Simular uma interrupção na conexão com o banco de dados PostgreSQL ou servidor. 3. Acessar ou recarregar a página da Dashboard . 4. Analisar a resposta das requisições e a interface apresentada.|
+| **Dados de teste** |- Estado da API: Indisponível / Erro interno de conexão. - Resposta esperada da API: Status 500 Internal Server Error. |
+| **Critérios de êxito** | A aplicação deve capturar a exceção, exibir uma mensagem de erro amigável na interface ("Não foi possível conectar ao servidor.") e manter o layout estável sem exceções não tratadas na tela. |
+
+#### CT-004-I — Bloqueio de Acesso às Notificações sem Autenticação Válida
+
+| Campo | Descrição |
+|---|---|
+| **Descrição** | Este caso de teste verifica se o sistema bloqueia o acesso à Central de Notificações e redireciona o utilizador para a página de login quando o token JWT estiver expirado, inválido ou ausente. |
+| **Responsável Caso de Teste** | Nicolas Oliveira |
+| **Tipo do Teste** | Insucesso |
+| **Requisitos associados** | RF-001: Permitir que o usuário realize login no sistema. RNF-004: O sistema deverá exigir autenticação para acesso às informações internas. |
+| **Passos** | 1. Inserir um token inválido, expirado ou remover a chave @crm:token do localStorage. 2. Tentar aceder diretamente ao endereço da Central de Notificações. 3. Observar a resposta das requisições de API e o comportamento do roteamento.|
+| **Dados de teste** |- Token de Autenticação: Ausente / Token expirado (Bearer token_invalido_123) - Resposta esperada da API: Status 401 Unauthorized ou 403 Forbidden. |
+| **Critérios de êxito** |O sistema deve interceptar a requisição, remover o token inválido do localStorage (caso exista), negar a exibição das informações internas e redirecionar imediatamente o utilizador para a tela de Login (/login).|
+
+
+
+
 ### ETAPA 4
 Criar casos de teste da etapa 4
