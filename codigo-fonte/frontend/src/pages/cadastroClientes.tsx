@@ -387,6 +387,7 @@ export function CadastroClientes() {
         </div>
       )}
 
+
       {/* MODAL DE EXCLUSÃO */}
       {mostrarModalExclusao && (
         <div className="modal-overlay">
