@@ -15,7 +15,10 @@ import {
   Search,
   Wrench,
   Phone,
-  ExternalLink
+  ExternalLink,
+  Pencil,
+  Trash2,
+  Save
 } from 'lucide-react';
 
 import "../agenda.css";
@@ -42,8 +45,15 @@ type Agendamento = {
   status: 'PENDENTE' | 'EM_ANDAMENTO' | 'CONCLUIDO' | 'CANCELADO';
   concluidoEm?: string | null;
   tecnico: string;
+  tecnicoId?: string | null;
   tecnicoEmail?: string;
   situacaoTemporal: 'ACONTECENDO' | 'ACONTECERA' | 'JA_ACONTECEU';
+};
+
+type Tecnico = {
+  id: string;
+  nome: string;
+  email: string;
 };
 
 const API = 'http://localhost:3333/api';
@@ -143,12 +153,30 @@ export function Agenda() {
   });
 
   const [agendamentos, setAgendamentos] = useState<Agendamento[]>([]);
+  const [tecnicos, setTecnicos] = useState<Tecnico[]>([]);
   const [carregando, setCarregando] = useState(false);
   const [termoBusca, setTermoBusca] = useState('');
 
   const [modalAberto, setModalAberto] = useState(false);
-
   const [dataSelecionada, setDataSelecionada] = useState<string | null>(null);
+
+  const [idEmEdicao, setIdEmEdicao] = useState<string | null>(null);
+  const [dadosEdicao, setDadosEdicao] = useState<{
+    descricao: string;
+    data: string;
+    horario: string;
+    tipo: 'PREVENTIVA' | 'CORRETIVA';
+    status: 'PENDENTE' | 'EM_ANDAMENTO' | 'CONCLUIDO' | 'CANCELADO';
+    tecnicoId: string;
+  }>({
+    descricao: '',
+    data: '',
+    horario: '',
+    tipo: 'PREVENTIVA',
+    status: 'PENDENTE',
+    tecnicoId: '',
+  });
+  const [salvandoEdicao, setSalvandoEdicao] = useState(false);
 
   async function carregarAgendamentos() {
     try {
@@ -173,8 +201,119 @@ export function Agenda() {
     }
   }
 
+  async function carregarTecnicos() {
+    try {
+      const token = obterToken();
+      const resposta = await fetch(`${API}/tecnicos`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!resposta.ok) {
+        return;
+      }
+
+      const dados: Tecnico[] = await resposta.json();
+      setTecnicos(dados);
+    } catch (erro) {
+      console.error(erro);
+    }
+  }
+
+  function iniciarEdicao(item: Agendamento) {
+    setIdEmEdicao(item.id);
+    setDadosEdicao({
+      descricao: item.servico,
+      data: item.data,
+      horario: item.horario,
+      tipo: item.tipo,
+      status: item.status,
+      tecnicoId: item.tecnicoId || '',
+    });
+  }
+
+  function cancelarEdicao() {
+    setIdEmEdicao(null);
+  }
+
+  async function salvarEdicao(id: string) {
+    try {
+      setSalvandoEdicao(true);
+      const token = obterToken();
+      const dataAgendada = new Date(`${dadosEdicao.data}T${dadosEdicao.horario}:00`).toISOString();
+
+      const resposta = await fetch(`${API}/agenda/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          descricao: dadosEdicao.descricao,
+          tipo: dadosEdicao.tipo,
+          status: dadosEdicao.status,
+          dataAgendada,
+          tecnicoId: dadosEdicao.tecnicoId || null,
+        }),
+      });
+
+      if (!resposta.ok) {
+        const erroJson = await resposta.json().catch(() => ({}));
+        alert(erroJson.error || 'Erro ao salvar alterações da Ordem de Serviço.');
+        return;
+      }
+
+      setIdEmEdicao(null);
+      const [anoNovo, mesNovo] = dadosEdicao.data.split('-').map(Number);
+      setMesAtual(new Date(anoNovo, mesNovo - 1, 1));
+      setDataSelecionada(dadosEdicao.data);
+      await carregarAgendamentos();
+    } catch (erro) {
+      console.error(erro);
+      alert('Erro ao conectar com o servidor para atualizar a Ordem de Serviço.');
+    } finally {
+      setSalvandoEdicao(false);
+    }
+  }
+
+  async function excluirOrdemServico(id: string) {
+    const confirmou = window.confirm(
+      'Deseja realmente excluir esta Ordem de Serviço da agenda?'
+    );
+
+    if (!confirmou) {
+      return;
+    }
+
+    try {
+      const token = obterToken();
+      const resposta = await fetch(`${API}/agenda/${id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!resposta.ok) {
+        alert('Erro ao excluir a Ordem de Serviço.');
+        return;
+      }
+
+      if (idEmEdicao === id) {
+        setIdEmEdicao(null);
+      }
+
+      await carregarAgendamentos();
+    } catch (erro) {
+      console.error(erro);
+      alert('Erro ao conectar com o servidor para excluir a Ordem de Serviço.');
+    }
+  }
+
   useEffect(() => {
     carregarAgendamentos();
+    carregarTecnicos();
   }, []);
 
   const ano = mesAtual.getFullYear();
@@ -245,6 +384,7 @@ export function Agenda() {
   function fecharModal() {
     setModalAberto(false);
     setDataSelecionada(null);
+    setIdEmEdicao(null);
   }
 
   const agendamentosFiltrados = useMemo(() => {
@@ -565,57 +705,206 @@ export function Agenda() {
                           </div>
                         </div>
 
-                        <div
-                          className="agenda-detalhes"
-                          style={{
-                            display: 'grid',
-                            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                            gap: '10px 16px',
-                            marginTop: 12
-                          }}
-                        >
-                          <span>
-                            <Clock3 size={15} />
-                            <strong>Horário:</strong> {agendamento.horario}
-                          </span>
-                          <span>
-                            <UserRound size={15} />
-                            <strong>Técnico:</strong> {agendamento.tecnico}
-                          </span>
-                          <span>
-                            <MapPin size={15} />
-                            <strong>Endereço:</strong> {agendamento.endereco || 'Endereço não informado'}
-                          </span>
-                          {agendamento.telefone && (
-                            <span>
-                              <Phone size={15} />
-                              <strong>Telefone:</strong> {agendamento.telefone}
-                            </span>
-                          )}
-                          <span>
-                            <Wrench size={15} />
-                            <strong>Aparelho:</strong> {agendamento.equipamento}
-                          </span>
-                        </div>
-
-                        {agendamento.equipamentoDetalhes && (
-                          <div className="agenda-observacao">
-                            <strong>Localização:</strong> {agendamento.equipamentoDetalhes.localizacao} •{" "}
-                            <strong>Capacidade:</strong> {agendamento.equipamentoDetalhes.capacidadeBtu.toLocaleString()} BTUs •{" "}
-                            <strong>Tipo de Manutenção:</strong> {agendamento.tipo === 'PREVENTIVA' ? 'Preventiva' : 'Corretiva'}
-                          </div>
-                        )}
-
-                        <div style={{ marginTop: 14 }}>
-                          <button
-                            type="button"
-                            className="agenda-botao-abrir-os"
-                            onClick={() => navigate('/ordem-servico')}
+                        {idEmEdicao === agendamento.id ? (
+                          <form
+                            className="agenda-form-edicao"
+                            onSubmit={(e) => {
+                              e.preventDefault();
+                              salvarEdicao(agendamento.id);
+                            }}
                           >
-                            <ExternalLink size={14} />
-                            Abrir na Ordem de Serviço
-                          </button>
-                        </div>
+                            <div className="agenda-form-edicao-titulo">
+                              Editar Ordem de Serviço
+                            </div>
+
+                            <div className="agenda-campo">
+                              <label>Descrição do Serviço / Problema</label>
+                              <textarea
+                                value={dadosEdicao.descricao}
+                                onChange={(e) =>
+                                  setDadosEdicao((prev) => ({ ...prev, descricao: e.target.value }))
+                                }
+                                required
+                                rows={2}
+                              />
+                            </div>
+
+                            <div className="agenda-form-edicao-grid">
+                              <div className="agenda-campo">
+                                <label>Data</label>
+                                <input
+                                  type="date"
+                                  value={dadosEdicao.data}
+                                  onChange={(e) =>
+                                    setDadosEdicao((prev) => ({ ...prev, data: e.target.value }))
+                                  }
+                                  required
+                                />
+                              </div>
+
+                              <div className="agenda-campo">
+                                <label>Horário</label>
+                                <input
+                                  type="time"
+                                  value={dadosEdicao.horario}
+                                  onChange={(e) =>
+                                    setDadosEdicao((prev) => ({ ...prev, horario: e.target.value }))
+                                  }
+                                  required
+                                />
+                              </div>
+                            </div>
+
+                            <div className="agenda-form-edicao-grid">
+                              <div className="agenda-campo">
+                                <label>Tipo de Manutenção</label>
+                                <select
+                                  value={dadosEdicao.tipo}
+                                  onChange={(e) =>
+                                    setDadosEdicao((prev) => ({
+                                      ...prev,
+                                      tipo: e.target.value as 'PREVENTIVA' | 'CORRETIVA',
+                                    }))
+                                  }
+                                >
+                                  <option value="PREVENTIVA">Preventiva</option>
+                                  <option value="CORRETIVA">Corretiva</option>
+                                </select>
+                              </div>
+
+                              <div className="agenda-campo">
+                                <label>Status</label>
+                                <select
+                                  value={dadosEdicao.status}
+                                  onChange={(e) =>
+                                    setDadosEdicao((prev) => ({
+                                      ...prev,
+                                      status: e.target.value as
+                                        | 'PENDENTE'
+                                        | 'EM_ANDAMENTO'
+                                        | 'CONCLUIDO'
+                                        | 'CANCELADO',
+                                    }))
+                                  }
+                                >
+                                  <option value="PENDENTE">Pendente</option>
+                                  <option value="EM_ANDAMENTO">Em andamento</option>
+                                  <option value="CONCLUIDO">Concluído</option>
+                                  <option value="CANCELADO">Cancelada</option>
+                                </select>
+                              </div>
+                            </div>
+
+                            <div className="agenda-campo">
+                              <label>Técnico Responsável</label>
+                              <select
+                                value={dadosEdicao.tecnicoId}
+                                onChange={(e) =>
+                                  setDadosEdicao((prev) => ({ ...prev, tecnicoId: e.target.value }))
+                                }
+                              >
+                                <option value="">Sem técnico atribuído</option>
+                                {tecnicos.map((tec) => (
+                                  <option key={tec.id} value={tec.id}>
+                                    {tec.nome}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+
+                            <div className="agenda-form-edicao-acoes">
+                              <button
+                                type="button"
+                                className="agenda-botao-cancelar-edicao"
+                                onClick={cancelarEdicao}
+                                disabled={salvandoEdicao}
+                              >
+                                Cancelar
+                              </button>
+                              <button
+                                type="submit"
+                                className="agenda-botao-salvar-edicao"
+                                disabled={salvandoEdicao}
+                              >
+                                <Save size={14} />
+                                {salvandoEdicao ? 'Salvando...' : 'Salvar Alterações'}
+                              </button>
+                            </div>
+                          </form>
+                        ) : (
+                          <>
+                            <div
+                              className="agenda-detalhes"
+                              style={{
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                                gap: '10px 16px',
+                                marginTop: 12
+                              }}
+                            >
+                              <span>
+                                <Clock3 size={15} />
+                                <strong>Horário:</strong> {agendamento.horario}
+                              </span>
+                              <span>
+                                <UserRound size={15} />
+                                <strong>Técnico:</strong> {agendamento.tecnico}
+                              </span>
+                              <span>
+                                <MapPin size={15} />
+                                <strong>Endereço:</strong> {agendamento.endereco || 'Endereço não informado'}
+                              </span>
+                              {agendamento.telefone && (
+                                <span>
+                                  <Phone size={15} />
+                                  <strong>Telefone:</strong> {agendamento.telefone}
+                                </span>
+                              )}
+                              <span>
+                                <Wrench size={15} />
+                                <strong>Aparelho:</strong> {agendamento.equipamento}
+                              </span>
+                            </div>
+
+                            {agendamento.equipamentoDetalhes && (
+                              <div className="agenda-observacao">
+                                <strong>Localização:</strong> {agendamento.equipamentoDetalhes.localizacao} •{" "}
+                                <strong>Capacidade:</strong> {agendamento.equipamentoDetalhes.capacidadeBtu.toLocaleString()} BTUs •{" "}
+                                <strong>Tipo de Manutenção:</strong> {agendamento.tipo === 'PREVENTIVA' ? 'Preventiva' : 'Corretiva'}
+                              </div>
+                            )}
+
+                            <div className="agenda-card-acoes">
+                              <button
+                                type="button"
+                                className="agenda-botao-editar"
+                                onClick={() => iniciarEdicao(agendamento)}
+                              >
+                                <Pencil size={13} />
+                                Editar
+                              </button>
+
+                              <button
+                                type="button"
+                                className="agenda-botao-excluir-os"
+                                onClick={() => excluirOrdemServico(agendamento.id)}
+                              >
+                                <Trash2 size={13} />
+                                Excluir
+                              </button>
+
+                              <button
+                                type="button"
+                                className="agenda-botao-abrir-os"
+                                style={{ marginLeft: 'auto' }}
+                                onClick={() => navigate('/ordem-servico')}
+                              >
+                                <ExternalLink size={14} />
+                                Abrir na Ordem de Serviço
+                              </button>
+                            </div>
+                          </>
+                        )}
                       </div>
                     ))}
                   </div>

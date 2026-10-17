@@ -88,7 +88,15 @@ export class RelatorioController {
   // EDITAR RELATÓRIO
   async atualizar(req: Request, res: Response) {
     try {
-      const { id } = req.params;
+      const rawId = req.params.id;
+      const id = Array.isArray(rawId) ? rawId[0] : rawId;
+
+      if (!id || typeof id !== 'string') {
+        return res.status(400).json({
+          message: 'ID inválido.',
+        });
+      }
+
       const {
         descricao,
         dataServico,
@@ -163,7 +171,14 @@ export class RelatorioController {
   // EXCLUIR RELATÓRIO
   async excluir(req: Request, res: Response) {
     try {
-      const { id } = req.params;
+      const rawId = req.params.id;
+      const id = Array.isArray(rawId) ? rawId[0] : rawId;
+
+      if (!id || typeof id !== 'string') {
+        return res.status(400).json({
+          message: 'ID inválido.',
+        });
+      }
 
       const existente = await prisma.relatorio.findUnique({
         where: { id },

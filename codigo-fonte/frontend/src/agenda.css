@@ -910,3 +910,118 @@
   border-radius: 8px;
   border: 1px dashed #cbd5e1;
 }
+
+.agenda-card-acoes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.agenda-botao-editar {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  color: #0369a1;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.agenda-botao-editar:hover {
+  background: #e0f2fe;
+  border-color: #0284c7;
+}
+
+.agenda-botao-excluir-os {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  color: #e11d48;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.agenda-botao-excluir-os:hover {
+  background: #ffe4e6;
+  border-color: #f43f5e;
+}
+
+.agenda-form-edicao {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 14px;
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.agenda-form-edicao-titulo {
+  font-size: 13px;
+  font-weight: 700;
+  color: #082f49;
+  margin-bottom: 4px;
+}
+
+.agenda-form-edicao-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.agenda-form-edicao-acoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.agenda-botao-salvar-edicao {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #1fa2d6;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  padding: 7px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.agenda-botao-salvar-edicao:hover {
+  background: #0284c7;
+}
+
+.agenda-botao-cancelar-edicao {
+  background: white;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+  border-radius: 6px;
+  padding: 7px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.agenda-botao-cancelar-edicao:hover {
+  background: #f1f5f9;
+}

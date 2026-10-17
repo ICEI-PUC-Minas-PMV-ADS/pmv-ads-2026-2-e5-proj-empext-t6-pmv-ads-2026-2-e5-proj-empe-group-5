@@ -192,6 +192,10 @@ app.get('/api/agenda/:id', (req, res) =>
   agendamentoController.show(req, res)
 );
 
+app.put('/api/agenda/:id', (req, res) =>
+  agendamentoController.update(req, res)
+);
+
 app.delete('/api/agenda/:id', (req, res) =>
   agendamentoController.remove(req, res)
 );
@@ -206,6 +210,10 @@ app.post('/agenda', (req, res) =>
 
 app.get('/agenda/:id', (req, res) =>
   agendamentoController.show(req, res)
+);
+
+app.put('/agenda/:id', (req, res) =>
+  agendamentoController.update(req, res)
 );
 
 app.delete('/agenda/:id', (req, res) =>
