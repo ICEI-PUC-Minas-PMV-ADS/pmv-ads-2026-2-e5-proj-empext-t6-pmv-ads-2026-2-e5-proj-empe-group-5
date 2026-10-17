@@ -742,3 +742,105 @@
   }
 
 }
+
+.agenda-busca-container {
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 8px 14px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+  gap: 10px;
+}
+
+.agenda-busca-icone {
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.agenda-busca-input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+  color: #082f49;
+  background: transparent;
+}
+
+.agenda-busca-limpar {
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+}
+
+.agenda-busca-limpar:hover {
+  color: #0f172a;
+}
+
+.agenda-busca-resultados {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.agenda-busca-titulo {
+  font-size: 14px;
+  font-weight: 600;
+  color: #082f49;
+  margin-bottom: 12px;
+}
+
+.agenda-busca-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.agenda-busca-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border: 1px solid #f1f5f9;
+  border-radius: 8px;
+  background: #f8fafc;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.agenda-busca-item:hover {
+  background: #f0f9ff;
+  border-color: #bae6fd;
+}
+
+.agenda-busca-item-info h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #082f49;
+}
+
+.agenda-busca-item-info p {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.agenda-busca-item-badge {
+  font-size: 12px;
+  font-weight: 600;
+  color: #0369a1;
+  background: #e0f2fe;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
