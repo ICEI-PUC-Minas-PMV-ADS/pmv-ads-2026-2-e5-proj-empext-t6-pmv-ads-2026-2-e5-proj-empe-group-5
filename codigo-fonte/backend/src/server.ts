@@ -27,6 +27,7 @@ const relatoriocontroller = new RelatorioController();
 app.use(cors());
 app.use(express.json());
 
+
 // Verificar se a API está funcionando
 app.get('/api/health', (req, res) => {
   return res.json({
@@ -91,6 +92,13 @@ app.get('/api/clientes', (req, res) =>
 
 app.get('/api/clientes/:id', (req, res) =>
   clienteController.show(req, res)
+);
+app.put('/api/clientes/:id', (req, res) =>
+  clienteController.update(req, res)
+);
+
+app.delete('/api/clientes/:id', (req, res) =>
+  clienteController.delete(req, res)
 );
 
 // ==========================================
@@ -178,3 +186,4 @@ const PORT = process.env.PORT || 3333;
 app.listen(PORT, () => {
   console.log(`🚀 Servidor rodando na porta ${PORT}`);
 });
+

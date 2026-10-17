@@ -18,7 +18,7 @@ export class ClienteController {
     return res.status(201).json(cliente);
   }
 
-  // Lista dos cliete
+  // Lista dos clientes 
   async list(req: Request, res: Response) {
     const clientes = await prisma.cliente.findMany({
       include: {
@@ -31,19 +31,60 @@ export class ClienteController {
     return res.json(clientes);
   }
 
-  // Buscar  por ID
-async show(req: Request, res: Response) {
-  const { id } = req.params as { id: string };
+  // Buscar por ID 
+  async show(req: Request, res: Response) {
+    const { id } = req.params as { id: string };
 
-  const cliente = await prisma.cliente.findUnique({
-    where: { id },
-    include: { equipamentos: true, ordensServico: true },
-  });
+    const cliente = await prisma.cliente.findUnique({
+      where: { id },
+      include: { equipamentos: true, ordensServico: true },
+    });
 
-  if (!cliente) {
-    return res.status(404).json({ error: 'Cliente não encontrado.' });
+    if (!cliente) {
+      return res.status(404).json({ error: 'Cliente não encontrado.' });
+    }
+
+    return res.json(cliente);
   }
 
-  return res.json(cliente);
+
+  // ATUALIZAR CLIENTE
+  async update(req: Request, res: Response) {
+    try {
+    const { id } = req.params as { id: string };
+      const { nome, email, telefone, endereco, cnpjCpf } = req.body;
+
+      const clienteAtualizado = await prisma.cliente.update({
+        where: { id },
+        data: {
+          nome,
+          email,
+          telefone,
+          endereco,
+          cnpjCpf,
+        },
+      });
+
+      return res.json(clienteAtualizado);
+    } catch (erro) {
+      console.error('Erro ao atualizar cliente:', erro);
+      return res.status(500).json({ error: 'Erro ao atualizar cliente.' });
+    }
+  }
+
+  // EXCLUIR CLIENTE
+  async delete(req: Request, res: Response) {
+    try {
+      const { id } = req.params as { id: string };
+
+      await prisma.cliente.delete({
+        where: { id },
+      });
+
+      return res.status(204).send();
+    } catch (erro) {
+      console.error('Erro ao excluir cliente:', erro);
+      return res.status(500).json({ error: 'Erro ao excluir cliente.' });
+    }
+  }
 }
-  }
