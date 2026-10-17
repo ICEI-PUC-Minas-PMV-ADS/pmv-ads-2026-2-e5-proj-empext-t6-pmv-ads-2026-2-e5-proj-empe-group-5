@@ -1,0 +1,77 @@
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  Outlet,
+} from 'react-router-dom';
+
+import Dashboard, { DashboardHome } from './pages/dashboard';
+import { Agenda } from './pages/agenda';
+import { OrdemServico } from './pages/ordemServico';
+import { CadastroClientes } from './pages/cadastroClientes';
+import { Relatorios } from './pages/relatorios';
+import { CriarRelatorio } from './pages/criarRelatorio';
+import { Login } from './pages/login';
+import { CadastroUsuario } from './pages/cadastroUsuario';
+import { Notificacoes } from './pages/notificacoes';
+
+// Verifica se existe uma sessão salva
+function RotaProtegida() {
+  const token = localStorage.getItem('@crm:token');
+
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return <Outlet />;
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+
+        {/* Página de Login e Cadastro */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/cadastro" element={<CadastroUsuario />} />
+
+        {/* Páginas que exigem login */}
+        <Route element={<RotaProtegida />}>
+          <Route path="/" element={<Dashboard />}>
+
+            <Route index element={<DashboardHome />} />
+
+            <Route path="agenda" element={<Agenda />} />
+
+            <Route
+              path="ordem-servico"
+              element={<OrdemServico />}
+            />
+
+          <Route path="relatorios" element={<Relatorios />} />
+
+          <Route path="relatorios/criar" element={<CriarRelatorio />}
+          />
+
+            <Route
+              path="clientes"
+              element={<CadastroClientes />}
+            />
+
+            {/* Rota da Central de Notificações */}
+            <Route
+              path="notificacoes"
+              element={<Notificacoes />}
+            />
+
+          </Route>
+        </Route>
+
+        {/* Endereço não encontrado */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+
+      </Routes>
+    </BrowserRouter>
+  );
+}
