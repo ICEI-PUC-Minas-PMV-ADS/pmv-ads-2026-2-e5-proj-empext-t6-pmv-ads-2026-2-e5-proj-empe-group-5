@@ -8,47 +8,135 @@ export class AgendamentoController {
 
       const where: any = {};
 
-      if (typeof data === 'string' && data.trim()) {
-        where.data = data.trim();
-      }
-
       if (typeof cliente === 'string' && cliente.trim()) {
         where.cliente = {
-          contains: cliente.trim(),
-          mode: 'insensitive',
+          nome: {
+            contains: cliente.trim(),
+            mode: 'insensitive',
+          },
         };
       }
 
       if (typeof tecnico === 'string' && tecnico.trim()) {
         where.tecnico = {
-          contains: tecnico.trim(),
-          mode: 'insensitive',
+          nome: {
+            contains: tecnico.trim(),
+            mode: 'insensitive',
+          },
         };
       }
 
       if (typeof busca === 'string' && busca.trim()) {
         const termo = busca.trim();
         where.OR = [
-          { cliente: { contains: termo, mode: 'insensitive' } },
-          { servico: { contains: termo, mode: 'insensitive' } },
-          { tecnico: { contains: termo, mode: 'insensitive' } },
-          { endereco: { contains: termo, mode: 'insensitive' } },
-          { observacoes: { contains: termo, mode: 'insensitive' } },
+          { descricao: { contains: termo, mode: 'insensitive' } },
+          { cliente: { nome: { contains: termo, mode: 'insensitive' } } },
+          { cliente: { endereco: { contains: termo, mode: 'insensitive' } } },
+          { equipamento: { nome: { contains: termo, mode: 'insensitive' } } },
+          { equipamento: { modelo: { contains: termo, mode: 'insensitive' } } },
+          { tecnico: { nome: { contains: termo, mode: 'insensitive' } } },
         ];
       }
 
-      const agendamentos = await prisma.agendamento.findMany({
+      const ordens = await prisma.ordemServico.findMany({
         where,
-        orderBy: [
-          { data: 'asc' },
-          { horario: 'asc' },
-        ],
+        include: {
+          cliente: {
+            select: {
+              id: true,
+              nome: true,
+              telefone: true,
+              email: true,
+              endereco: true,
+            },
+          },
+          equipamento: {
+            select: {
+              id: true,
+              nome: true,
+              marca: true,
+              modelo: true,
+              localizacao: true,
+              capacidadeBtu: true,
+            },
+          },
+          tecnico: {
+            select: {
+              id: true,
+              nome: true,
+              email: true,
+            },
+          },
+        },
+        orderBy: {
+          dataAgendada: 'asc',
+        },
       });
 
-      return res.json(agendamentos);
+      const agora = new Date();
+
+      const eventos = ordens.map((os) => {
+        const dataObj = new Date(os.dataAgendada);
+        const ano = dataObj.getFullYear();
+        const mes = String(dataObj.getMonth() + 1).padStart(2, '0');
+        const dia = String(dataObj.getDate()).padStart(2, '0');
+        const horas = String(dataObj.getHours()).padStart(2, '0');
+        const minutos = String(dataObj.getMinutes()).padStart(2, '0');
+
+        const dataFormatada = `${ano}-${mes}-${dia}`;
+        const horarioFormatado = `${horas}:${minutos}`;
+
+        let situacaoTemporal: 'ACONTECENDO' | 'ACONTECERA' | 'JA_ACONTECEU';
+
+        if (os.status === 'CONCLUIDO' || os.status === 'CANCELADO') {
+          situacaoTemporal = 'JA_ACONTECEU';
+        } else if (os.status === 'EM_ANDAMENTO') {
+          situacaoTemporal = 'ACONTECENDO';
+        } else {
+          const diffMs = dataObj.getTime() - agora.getTime();
+          const diffHoras = diffMs / (1000 * 60 * 60);
+
+          if (diffHoras < -2) {
+            situacaoTemporal = 'JA_ACONTECEU';
+          } else if (diffHoras >= -2 && diffHoras <= 2) {
+            situacaoTemporal = 'ACONTECENDO';
+          } else {
+            situacaoTemporal = 'ACONTECERA';
+          }
+        }
+
+        return {
+          id: os.id,
+          ordemServicoId: os.id,
+          data: dataFormatada,
+          horario: horarioFormatado,
+          dataAgendada: os.dataAgendada,
+          cliente: os.cliente?.nome ?? 'Cliente não informado',
+          telefone: os.cliente?.telefone ?? '',
+          endereco: os.cliente?.endereco ?? '',
+          equipamento: os.equipamento
+            ? `${os.equipamento.nome} (${os.equipamento.marca} - ${os.equipamento.modelo})`
+            : 'Equipamento não informado',
+          equipamentoDetalhes: os.equipamento,
+          servico: os.descricao,
+          tipo: os.tipo,
+          status: os.status,
+          concluidoEm: os.concluidoEm,
+          tecnico: os.tecnico?.nome ?? 'Não atribuído',
+          tecnicoEmail: os.tecnico?.email ?? '',
+          situacaoTemporal,
+        };
+      });
+
+      if (typeof data === 'string' && data.trim()) {
+        const eventosFiltradosPorData = eventos.filter((e) => e.data === data.trim());
+        return res.json(eventosFiltradosPorData);
+      }
+
+      return res.json(eventos);
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error: 'Erro ao buscar agendamentos.' });
+      return res.status(500).json({ error: 'Erro ao buscar eventos da agenda.' });
     }
   }
 
@@ -60,81 +148,96 @@ export class AgendamentoController {
         return res.status(400).json({ error: 'ID inválido.' });
       }
 
-      const agendamento = await prisma.agendamento.findUnique({
+      const os = await prisma.ordemServico.findUnique({
         where: { id },
-      });
-
-      if (!agendamento) {
-        return res.status(404).json({ error: 'Agendamento não encontrado.' });
-      }
-
-      return res.json(agendamento);
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ error: 'Erro ao buscar agendamento.' });
-    }
-  }
-
-  async create(req: Request, res: Response) {
-    try {
-      const { data, horario, cliente, servico, tecnico, endereco, observacoes } = req.body ?? {};
-
-      if (
-        typeof data !== 'string' || !data.trim() ||
-        typeof horario !== 'string' || !horario.trim() ||
-        typeof cliente !== 'string' || !cliente.trim() ||
-        typeof servico !== 'string' || !servico.trim() ||
-        typeof tecnico !== 'string' || !tecnico.trim() ||
-        typeof endereco !== 'string' || !endereco.trim()
-      ) {
-        return res.status(400).json({
-          error: 'Data, horário, cliente, serviço, técnico e endereço são obrigatórios.',
-        });
-      }
-
-      const agendamento = await prisma.agendamento.create({
-        data: {
-          data: data.trim(),
-          horario: horario.trim(),
-          cliente: cliente.trim(),
-          servico: servico.trim(),
-          tecnico: tecnico.trim(),
-          endereco: endereco.trim(),
-          observacoes: typeof observacoes === 'string' && observacoes.trim() ? observacoes.trim() : null,
+        include: {
+          cliente: {
+            select: {
+              id: true,
+              nome: true,
+              telefone: true,
+              email: true,
+              endereco: true,
+            },
+          },
+          equipamento: {
+            select: {
+              id: true,
+              nome: true,
+              marca: true,
+              modelo: true,
+              localizacao: true,
+              capacidadeBtu: true,
+            },
+          },
+          tecnico: {
+            select: {
+              id: true,
+              nome: true,
+              email: true,
+            },
+          },
         },
       });
 
-      return res.status(201).json(agendamento);
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ error: 'Erro ao criar agendamento.' });
-    }
-  }
-
-  async remove(req: Request, res: Response) {
-    try {
-      const id = req.params.id;
-
-      if (typeof id !== 'string') {
-        return res.status(400).json({ error: 'ID inválido.' });
+      if (!os) {
+        return res.status(404).json({ error: 'Ordem de serviço não encontrada.' });
       }
 
-      const agendamento = await prisma.agendamento.findUnique({
-        where: { id },
-      });
+      const dataObj = new Date(os.dataAgendada);
+      const ano = dataObj.getFullYear();
+      const mes = String(dataObj.getMonth() + 1).padStart(2, '0');
+      const dia = String(dataObj.getDate()).padStart(2, '0');
+      const horas = String(dataObj.getHours()).padStart(2, '0');
+      const minutos = String(dataObj.getMinutes()).padStart(2, '0');
 
-      if (!agendamento) {
-        return res.status(404).json({ error: 'Agendamento não encontrado.' });
+      const dataFormatada = `${ano}-${mes}-${dia}`;
+      const horarioFormatado = `${horas}:${minutos}`;
+
+      const agora = new Date();
+      let situacaoTemporal: 'ACONTECENDO' | 'ACONTECERA' | 'JA_ACONTECEU';
+
+      if (os.status === 'CONCLUIDO' || os.status === 'CANCELADO') {
+        situacaoTemporal = 'JA_ACONTECEU';
+      } else if (os.status === 'EM_ANDAMENTO') {
+        situacaoTemporal = 'ACONTECENDO';
+      } else {
+        const diffMs = dataObj.getTime() - agora.getTime();
+        const diffHoras = diffMs / (1000 * 60 * 60);
+
+        if (diffHoras < -2) {
+          situacaoTemporal = 'JA_ACONTECEU';
+        } else if (diffHoras >= -2 && diffHoras <= 2) {
+          situacaoTemporal = 'ACONTECENDO';
+        } else {
+          situacaoTemporal = 'ACONTECERA';
+        }
       }
 
-      await prisma.agendamento.delete({
-        where: { id },
+      return res.json({
+        id: os.id,
+        ordemServicoId: os.id,
+        data: dataFormatada,
+        horario: horarioFormatado,
+        dataAgendada: os.dataAgendada,
+        cliente: os.cliente?.nome ?? 'Cliente não informado',
+        telefone: os.cliente?.telefone ?? '',
+        endereco: os.cliente?.endereco ?? '',
+        equipamento: os.equipamento
+          ? `${os.equipamento.nome} (${os.equipamento.marca} - ${os.equipamento.modelo})`
+          : 'Equipamento não informado',
+        equipamentoDetalhes: os.equipamento,
+        servico: os.descricao,
+        tipo: os.tipo,
+        status: os.status,
+        concluidoEm: os.concluidoEm,
+        tecnico: os.tecnico?.nome ?? 'Não atribuído',
+        tecnicoEmail: os.tecnico?.email ?? '',
+        situacaoTemporal,
       });
-
-      return res.status(204).send();
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error: 'Erro ao excluir agendamento.' });
+      return res.status(500).json({ error: 'Erro ao buscar evento da agenda.' });
     }
   }
 }

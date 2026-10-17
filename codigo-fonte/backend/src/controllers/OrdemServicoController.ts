@@ -5,10 +5,10 @@ import { prisma } from '../lib/prisma.js';
 
 const dadosRelacionados = {
   cliente: {
-    select: { id: true, nome: true, telefone: true },
+    select: { id: true, nome: true, telefone: true, endereco: true },
   },
   equipamento: {
-    select: { id: true, nome: true, marca: true, modelo: true },
+    select: { id: true, nome: true, marca: true, modelo: true, localizacao: true, capacidadeBtu: true },
   },
   tecnico: {
     select: { id: true, nome: true, email: true },
