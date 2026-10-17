@@ -103,3 +103,18 @@ model Relatorio {
 
   @@map("relatorios")
 }
+
+model Agendamento {
+  id          String   @id @default(uuid())
+  data        String
+  horario     String
+  cliente     String
+  servico     String
+  tecnico     String
+  endereco    String
+  observacoes String?
+  criadoEm    DateTime @default(now())
+  atualizadoEm DateTime @updatedAt
+
+  @@map("agendamentos")
+}

@@ -10,6 +10,7 @@ import { OrdemServicoController } from './controllers/OrdemServicoController.js'
 import { EquipamentoController } from './controllers/EquipamentoController.js';
 import { TecnicoController } from './controllers/TecnicoController.js';
 import { RelatorioController } from './controllers/RelatorioController.js';
+import { AgendamentoController } from './controllers/AgendamentoController.js';
 import { authMiddleware } from './Middlewares/authMiddleware.js';
 
 dotenv.config();
@@ -23,6 +24,7 @@ const ordemServicoController = new OrdemServicoController();
 const equipamentoController = new EquipamentoController();
 const tecnicoController = new TecnicoController();
 const relatoriocontroller = new RelatorioController();
+const agendamentoController = new AgendamentoController();
 
 app.use(cors());
 app.use(express.json());
@@ -176,6 +178,38 @@ app.put('/api/relatorios/:id', (req, res) =>
 
 app.delete('/api/relatorios/:id', (req, res) =>
   relatoriocontroller.excluir(req, res)
+);
+
+app.get('/api/agenda', (req, res) =>
+  agendamentoController.list(req, res)
+);
+
+app.post('/api/agenda', (req, res) =>
+  agendamentoController.create(req, res)
+);
+
+app.get('/api/agenda/:id', (req, res) =>
+  agendamentoController.show(req, res)
+);
+
+app.delete('/api/agenda/:id', (req, res) =>
+  agendamentoController.remove(req, res)
+);
+
+app.get('/agenda', (req, res) =>
+  agendamentoController.list(req, res)
+);
+
+app.post('/agenda', (req, res) =>
+  agendamentoController.create(req, res)
+);
+
+app.get('/agenda/:id', (req, res) =>
+  agendamentoController.show(req, res)
+);
+
+app.delete('/agenda/:id', (req, res) =>
+  agendamentoController.remove(req, res)
 );
 
 

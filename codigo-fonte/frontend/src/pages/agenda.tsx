@@ -14,25 +14,30 @@ import {
   Plus,
   Trash2,
   UserRound,
-  X
+  X,
+  Search
 } from 'lucide-react';
 
 import "../agenda.css";
 
 type Agendamento = {
-  id: number;
+  id: string;
   data: string;
   cliente: string;
   servico: string;
   horario: string;
   tecnico: string;
   endereco: string;
-  observacoes: string;
+  observacoes?: string | null;
 };
 
 type FormularioAgendamento = Omit<Agendamento, "id" | "data">;
 
-const CHAVE_LOCAL_STORAGE = "emmaintenance_agendamentos";
+const API = 'http://localhost:3333/api';
+
+function obterToken(): string {
+  return localStorage.getItem('@crm:token') || '';
+}
 
 const meses = [
   "Janeiro",
@@ -59,13 +64,6 @@ const diasSemana = [
   "Sáb"
 ];
 
-/*
- * Enquanto o módulo de clientes não estiver integrado ao banco,
- * vamos usar alguns clientes de exemplo.
- *
- * Depois podemos substituir isso pelos clientes cadastrados
- * no módulo "Clientes".
- */
 const clientesDisponiveis = [
   "Hospital Central",
   "Clínica Vida",
@@ -78,55 +76,6 @@ const tecnicosDisponiveis = [
   "Carlos Silva",
   "João Santos",
   "Marcos Oliveira"
-];
-
-/*
- * Alguns agendamentos iniciais apenas para demonstrar
- * como a agenda ficará funcionando.
- *
- * Eles serão gravados no localStorage na primeira execução.
- */
-const agendamentosIniciais: Agendamento[] = [
-  {
-    id: 1,
-    data: "2026-09-17",
-    cliente: "Hospital Central",
-    servico: "Troca do filtro do ar-condicionado",
-    horario: "08:30",
-    tecnico: "Carlos Silva",
-    endereco: "Av. Central, 250",
-    observacoes: "Verificar também o estado da serpentina."
-  },
-  {
-    id: 2,
-    data: "2026-09-17",
-    cliente: "Clínica Vida",
-    servico: "Manutenção preventiva",
-    horario: "14:00",
-    tecnico: "João Santos",
-    endereco: "Rua das Flores, 120",
-    observacoes: ""
-  },
-  {
-    id: 3,
-    data: "2026-09-26",
-    cliente: "Empresa Alfa",
-    servico: "Limpeza do equipamento",
-    horario: "09:00",
-    tecnico: "Marcos Oliveira",
-    endereco: "Rua Principal, 500",
-    observacoes: "Levar material de limpeza."
-  },
-  {
-    id: 4,
-    data: "2026-09-26",
-    cliente: "Shopping Tupanuara",
-    servico: "Inspeção do sistema",
-    horario: "15:30",
-    tecnico: "Carlos Silva",
-    endereco: "Av. Brasil, 800",
-    observacoes: ""
-  }
 ];
 
 function criarChaveData(
@@ -193,29 +142,9 @@ export function Agenda() {
     );
   });
 
-  /*
-   * Carrega os agendamentos salvos.
-   *
-   * Se ainda não existir nada salvo, utiliza os exemplos.
-   */
-  const [agendamentos, setAgendamentos] = useState<Agendamento[]>(() => {
-    try {
-      const dadosSalvos = localStorage.getItem(
-        CHAVE_LOCAL_STORAGE
-      );
-
-      if (dadosSalvos) {
-        return JSON.parse(dadosSalvos);
-      }
-    } catch (erro) {
-      console.error(
-        "Erro ao carregar os agendamentos:",
-        erro
-      );
-    }
-
-    return agendamentosIniciais;
-  });
+  const [agendamentos, setAgendamentos] = useState<Agendamento[]>([]);
+  const [carregando, setCarregando] = useState(false);
+  const [termoBusca, setTermoBusca] = useState('');
 
   const [modalAberto, setModalAberto] = useState(false);
 
@@ -230,15 +159,32 @@ export function Agenda() {
       formularioInicial()
     );
 
-  /*
-   * Salva automaticamente qualquer alteração.
-   */
+  async function carregarAgendamentos() {
+    try {
+      setCarregando(true);
+      const token = obterToken();
+      const resposta = await fetch(`${API}/agenda`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!resposta.ok) {
+        return;
+      }
+
+      const dados: Agendamento[] = await resposta.json();
+      setAgendamentos(dados);
+    } catch (erro) {
+      console.error(erro);
+    } finally {
+      setCarregando(false);
+    }
+  }
+
   useEffect(() => {
-    localStorage.setItem(
-      CHAVE_LOCAL_STORAGE,
-      JSON.stringify(agendamentos)
-    );
-  }, [agendamentos]);
+    carregarAgendamentos();
+  }, []);
 
   const ano = mesAtual.getFullYear();
   const mes = mesAtual.getMonth();
@@ -382,10 +328,7 @@ export function Agenda() {
     }));
   }
 
-  /*
-   * Salva um novo agendamento.
-   */
-  function salvarAgendamento(
+  async function salvarAgendamento(
     evento: FormEvent<HTMLFormElement>
   ) {
     evento.preventDefault();
@@ -394,34 +337,45 @@ export function Agenda() {
       return;
     }
 
-    const novoAgendamento: Agendamento = {
-      id: Date.now(),
-      data: dataSelecionada,
-      ...formulario
-    };
+    try {
+      const token = obterToken();
+      const resposta = await fetch(`${API}/agenda`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          data: dataSelecionada,
+          ...formulario,
+        }),
+      });
 
-    setAgendamentos(
-      (anteriores) => [
+      if (!resposta.ok) {
+        const corpo = await resposta.json().catch(() => ({}));
+        alert(corpo.error || 'Erro ao salvar agendamento.');
+        return;
+      }
+
+      const novoAgendamento: Agendamento = await resposta.json();
+
+      setAgendamentos((anteriores) => [
         ...anteriores,
-        novoAgendamento
-      ]
-    );
+        novoAgendamento,
+      ]);
 
-    setFormulario(
-      formularioInicial()
-    );
+      setFormulario(
+        formularioInicial()
+      );
 
-    /*
-     * Depois de salvar, escondemos o formulário
-     * para mostrar os agendamentos atualizados.
-     */
-    setMostrarFormulario(false);
+      setMostrarFormulario(false);
+    } catch (erro) {
+      console.error(erro);
+      alert('Erro ao conectar com o servidor.');
+    }
   }
 
-  /*
-   * Exclui um agendamento.
-   */
-  function excluirAgendamento(id: number) {
+  async function excluirAgendamento(id: string) {
     const confirmar = window.confirm(
       "Deseja realmente excluir este agendamento?"
     );
@@ -430,14 +384,47 @@ export function Agenda() {
       return;
     }
 
-    setAgendamentos(
-      (anteriores) =>
+    try {
+      const token = obterToken();
+      const resposta = await fetch(`${API}/agenda/${id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!resposta.ok) {
+        alert('Erro ao excluir agendamento.');
+        return;
+      }
+
+      setAgendamentos((anteriores) =>
         anteriores.filter(
           (agendamento) =>
             agendamento.id !== id
         )
-    );
+      );
+    } catch (erro) {
+      console.error(erro);
+      alert('Erro ao conectar com o servidor.');
+    }
   }
+
+  const agendamentosFiltrados = useMemo(() => {
+    if (!termoBusca.trim()) {
+      return agendamentos;
+    }
+
+    const termo = termoBusca.toLowerCase().trim();
+
+    return agendamentos.filter((a) =>
+      a.cliente.toLowerCase().includes(termo) ||
+      a.servico.toLowerCase().includes(termo) ||
+      a.tecnico.toLowerCase().includes(termo) ||
+      a.endereco.toLowerCase().includes(termo) ||
+      (a.observacoes && a.observacoes.toLowerCase().includes(termo))
+    );
+  }, [agendamentos, termoBusca]);
 
   /*
    * Agendamentos do dia atualmente selecionado.
@@ -520,6 +507,61 @@ export function Agenda() {
 
       </div>
 
+      <div className="agenda-busca-container">
+        <Search size={18} className="agenda-busca-icone" />
+        <input
+          type="text"
+          placeholder="Pesquisar agendamento por cliente, serviço, técnico ou endereço..."
+          value={termoBusca}
+          onChange={(evento) => setTermoBusca(evento.target.value)}
+          className="agenda-busca-input"
+        />
+        {termoBusca && (
+          <button
+            type="button"
+            onClick={() => setTermoBusca('')}
+            className="agenda-busca-limpar"
+            title="Limpar pesquisa"
+          >
+            <X size={16} />
+          </button>
+        )}
+      </div>
+
+      {termoBusca && (
+        <div className="agenda-busca-resultados">
+          <div className="agenda-busca-titulo">
+            Resultados da busca ({agendamentosFiltrados.length})
+          </div>
+          {agendamentosFiltrados.length === 0 ? (
+            <p style={{ margin: 0, fontSize: 13, color: '#64748b' }}>
+              Nenhum agendamento encontrado para "{termoBusca}".
+            </p>
+          ) : (
+            <div className="agenda-busca-lista">
+              {agendamentosFiltrados.map((item) => (
+                <div
+                  key={item.id}
+                  className="agenda-busca-item"
+                  onClick={() => {
+                    const [anoItem, mesItem] = item.data.split('-').map(Number);
+                    setMesAtual(new Date(anoItem, mesItem - 1, 1));
+                    setDataSelecionada(item.data);
+                    setMostrarFormulario(false);
+                    setModalAberto(true);
+                  }}
+                >
+                  <div className="agenda-busca-item-info">
+                    <h4>{item.cliente} - {item.servico}</h4>
+                    <p>{formatarDataCurta(item.data)} às {item.horario} • Técnico: {item.tecnico} • {item.endereco}</p>
+                  </div>
+                  <span className="agenda-busca-item-badge">Ver no dia</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* CALENDÁRIO */}
 
@@ -567,7 +609,7 @@ export function Agenda() {
               );
 
               const agendamentosDoDiaAtual =
-                agendamentos.filter(
+                agendamentosFiltrados.filter(
                   (agendamento) =>
                     agendamento.data === data
                 );
