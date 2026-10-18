@@ -126,6 +126,16 @@ Criar casos de teste da etapa 3
 | **Critérios de êxito** |O sistema deve interceptar a requisição, remover o token inválido do localStorage (caso exista), negar a exibição das informações internas e redirecionar imediatamente o utilizador para a tela de Login (/login).|
 
 
+### Caso de Teste 2: Tentativa de Registo com CPF/CNPJ Duplicado (Insucesso)
+
+| Campo | Descrição |
+| --- | --- |
+| **Descrição** | Este caso de teste verifica se o sistema impede o registo de um cliente cujo CPF/CNPJ já se encontra registado na base de dados, exibindo o tratamento de erro adequado. |
+| **Responsável Caso de Teste** | Júlia Gonçalves |
+| **Tipo do Teste** | Insucesso |
+| **Passos** | 1. Aceder à página de Registo de Clientes.<br>2. Preencher o formulário inserindo um CPF/CNPJ que já pertença a um cliente existente no sistema.<br>3. Clicar no botão "Salvar".<br>4. Analisar a resposta da API e a mensagem exibida na interface. |
+| **Dados de teste** | - **Cliente Existente:** CPF/CNPJ "12.345.678/0001-90".<br>- **Resposta Esperada da API:** Status 400 Bad Request com a mensagem `{"error": "CPF/CNPJ já cadastrado."}`. |
+| **Critérios de êxito** | O sistema deve bloquear a inserção na base de dados, retornar o status 400 Bad Request e exibir uma mensagem amigável na interface notificando o utilizador sobre o conflito. |
 
 
 ### ETAPA 4
