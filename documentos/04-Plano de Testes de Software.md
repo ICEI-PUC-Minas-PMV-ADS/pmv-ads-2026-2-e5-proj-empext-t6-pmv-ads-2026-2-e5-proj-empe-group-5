@@ -88,6 +88,17 @@ Criar casos de teste da etapa 3
 | **Dados de teste** |- Token de Autenticação: Token JWT válido salvo no localStorage (@crm:token) - Cliente de Teste: Cliente com última revisão realizada há mais de 180 dias (>6 meses). - Ordens de Serviço: Registros gravados com status PENDENTE e EM_ANDAMENTO. |
 | **Critérios de êxito** | O servidor deve responder com status 200 OK na API e a interface deve renderizar os cards das ordens ativas e destacar os clientes em atraso com a badge "Revisão Recomendada" e os dados de contacto. |
 
+### Caso de Teste 1: Registo, Edição e Exclusão de Clientes 
+
+| Campo | Descrição |
+| --- | --- |
+| **Descrição** | Este caso de teste verifica se o utilizador consegue registar um novo cliente, editar os seus dados existentes e eliminar o registo com sucesso na interface. |
+| **Responsável Caso de Teste** | Júlia Gonçalves |
+| **Tipo do Teste** | Sucesso |
+| **Passos** | 1. Fazer login no sistema e aceder à página de Registo de Clientes.<br>2. Preencher o formulário com dados válidos (Nome, Email, Telefone, Endereço, CPF/CNPJ) e clicar em "Salvar".<br>3. Localizar o cliente na lista e clicar no botão de edição (✏️), alterar o telefone e guardar.<br>4. Clicar no botão de eliminação (🗑️) e confirmar a exclusão. |
+| **Dados de teste** | - **Novo Cliente:** Nome: "Empresa Exemplo", Email: "contacto@exemplo.com", Telefone: "31999998888", CPF/CNPJ: "12.345.678/0001-90".<br>- **Edição:** Telefone alterado para "31988887777". |
+| **Critérios de êxito** | O sistema deve responder com status 201 Created no registo, 200 OK na atualização e 204 No Content na eliminação, atualizando a lista na interface em tempo real e sem erros na consola. |
+
 ####  Caso de Teste de Insucesso
 
 #### CT-002-I — Falha de Conexão no Carregamento da Dashboard
