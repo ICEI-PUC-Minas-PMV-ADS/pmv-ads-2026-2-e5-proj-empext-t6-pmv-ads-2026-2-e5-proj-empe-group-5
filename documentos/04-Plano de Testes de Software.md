@@ -13,10 +13,10 @@ Apresente os casos de testes utilizados na realização da verificação e valid
 
 | Campo | Descrição |
 |---|---|
-| **Descrição** | Este caso de teste verifica se a página Dashboard carrega e exibe corretamente os indicadores gerais e os agendamentos ao aceder com um utilizador autenticado.|
+| **Descrição** | O objetivo deste plano de teste é verificar se a funcionalidade de login e cadastro está operando corretamente, garantindo que os usuários consigam acessar o sistema de maneira segura, eficiente e intuitiva.|
 | **Responsável Caso de Teste** | Fernando Cardoso |
 | **Tipo do Teste** | Sucesso |
-| **Requisitos associados** | RF-001: O objetivo deste plano de teste é verificar se a funcionalidade de login e cadastro está operando corretamente, garantindo que os usuários consigam acessar o sistema de maneira segura, eficiente e intuitiva. |
+| **Requisitos associados** | O plano de teste tem como finalidade assegurar a qualidade, a segurança e a confiabilidade da funcionalidade de login.. |
 | **Passos** | 1. Abrir a página de login.<br> Informar um e-mail cadastrado.<br>Digitar a senha correta.<br>Clicar no botão "Entrar".<br>Verificar a página apresentada.<br>
 | **Dados de teste** | - Token de Autenticação: Token JWT válido salvo no localStorage (@crm:token)<br>- Utilizador: admin@empresa.com<br>- Dados na Base de Dados: Múltiplas OS com status CONCLUIDO, EM_ANDAMENTO e clientes ativos.<br> |
 | **Critérios de êxito** | O sistema deve autenticar o usuário e redirecioná-lo para a página correspondente ao seu perfil.|
