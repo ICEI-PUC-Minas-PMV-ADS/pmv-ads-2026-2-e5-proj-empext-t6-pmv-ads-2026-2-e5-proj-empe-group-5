@@ -6,6 +6,21 @@ Apresente os casos de testes utilizados na realização da verificação e valid
 - **Sucesso**: Tem o objetivo de verificar se as funcionalidades funcionam corretamente.
 - **Insucesso**: Tem o objetivo de verificar se o sistema trata erros de maneira correta.
 
+### ETAPA 1
+
+####  Caso de Teste de Sucesso
+#### CT-001-S — Cadastro e login do usuario 
+
+| Campo | Descrição |
+|---|---|
+| **Descrição** | Este caso de teste verifica se a página Dashboard carrega e exibe corretamente os indicadores gerais e os agendamentos ao aceder com um utilizador autenticado.|
+| **Responsável Caso de Teste** | Fernando Cardoso |
+| **Tipo do Teste** | Sucesso |
+| **Requisitos associados** | RF-001: O objetivo deste plano de teste é verificar se a funcionalidade de login e cadastro está operando corretamente, garantindo que os usuários consigam acessar o sistema de maneira segura, eficiente e intuitiva. |
+| **Passos** | 1. Abrir a página de login.<br> Informar um e-mail cadastrado.<br>Digitar a senha correta.<br>Clicar no botão "Entrar".<br>Verificar a página apresentada.<br>
+| **Dados de teste** | - Token de Autenticação: Token JWT válido salvo no localStorage (@crm:token)<br>- Utilizador: admin@empresa.com<br>- Dados na Base de Dados: Múltiplas OS com status CONCLUIDO, EM_ANDAMENTO e clientes ativos.<br> |
+| **Critérios de êxito** | O sistema deve autenticar o usuário e redirecioná-lo para a página correspondente ao seu perfil.|
+
 ### ETAPA 2
 
 ####  Caso de Teste de Sucesso
