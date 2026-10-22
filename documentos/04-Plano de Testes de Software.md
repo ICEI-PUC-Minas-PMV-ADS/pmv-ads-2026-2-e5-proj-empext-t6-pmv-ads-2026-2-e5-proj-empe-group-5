@@ -153,5 +153,18 @@ Criar casos de teste da etapa 3
 | **Critérios de êxito** | O sistema deve bloquear a inserção na base de dados, retornar o status 400 Bad Request e exibir uma mensagem amigável na interface notificando o utilizador sobre o conflito. |
 
 
+#### CT-001-S — Criação, edição, listagem e exclusão de relatórios.
+
+| Campo | Descrição |
+|---|---|
+| **Descrição** | Este caso de teste verifica a criação e inserção de relatórios em uma lista, contendo todos os campos com as informações competentes preenchidas. |
+| **Responsável Caso de Teste** | Moisés Nascimento |
+| **Tipo do Teste** | Sucesso |
+| **Requisitos associados** | RF-011: Permitir a geração de relatórios dos serviços realizados em determinado período. |
+| **Passos** | 1. Clicar no botão "Criar relatório". 2. Preencher todos os campos com informações válidas. 3. Clicar em "Salvar relatório" e observar se o mesmo foi listado no campo dos relatórios.|
+| **Dados de teste** |- Descrição do serviço: O trabalho consistiu em uma limpeza de rotina do equipamento em questão, e foi concluído as 15:03. Sem declarações adicionais.<br> Nome do Cliente: Antônio Parreira Lopes.<br> Nome do equipamento: Ar-Condicionado Philco Split Inverter 9000BTUs Frio PAC9FC.<br> Data: 18/10/2026.<br> Funcionário: Rainan Soares Dias. <br> Endereço: Rua Rio Branco, 1204, Castelo nobre.  |
+| **Critérios de êxito** |O sistema deve executar o salvamento no banco de dados de todas as informações inseridas e listar elas de forma visível no campo de relatórios da aplicação.|
+
+
 ### ETAPA 4
 Criar casos de teste da etapa 4
