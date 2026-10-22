@@ -1,6 +1,11 @@
 # Etapa 1 - Apresentação da proposta da Solução
-Arquivo de apresentação (em slides) da proposta de solução  
-Deve conter a descrição do cliente, o Project Model Canvas e o Diagrama de Caso de Uso.
+
+## Slide de apresentação
+
+Segue abaixo o arquivo de apresentação (em slides) da proposta de solução, contendo a descrição do cliente, o Project Model Canvas e o Diagrama de Caso de Uso.
+
+[E-Maintenance (1).pptx](https://github.com/user-attachments/files/31891732/E-Maintenance.1.pptx)
+
 
 # Etapa 5 - Apresentação da Solução
 - Apresentação para Mostra de Extensão Eixo 5 ADS:
