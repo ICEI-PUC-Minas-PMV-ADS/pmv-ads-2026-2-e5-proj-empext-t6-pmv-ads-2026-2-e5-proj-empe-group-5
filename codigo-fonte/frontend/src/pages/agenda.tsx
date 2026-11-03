@@ -155,7 +155,7 @@ export function Agenda() {
 
   const [agendamentos, setAgendamentos] = useState<Agendamento[]>([]);
   const [tecnicos, setTecnicos] = useState<Tecnico[]>([]);
-  const [carregando, setCarregando] = useState(false);
+ const [, setCarregando] = useState(false);
   const [termoBusca, setTermoBusca] = useState('');
 
   const [modalAberto, setModalAberto] = useState(false);
