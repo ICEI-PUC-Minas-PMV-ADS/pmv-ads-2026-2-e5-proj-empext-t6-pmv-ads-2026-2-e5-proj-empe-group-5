@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import { API_URL } from '../services/api';
 
 import {
   Home,
@@ -136,8 +137,8 @@ export default function Dashboard() {
               path="/clientes"
             />
 
-            <NavItem
-              icon={<FileText />}
+            <NavItem 
+            icon={<FileText />}
               label="Relatórios"
               isCollapsed={isSidebarCollapsed}
               path="/relatorios"
@@ -148,14 +149,12 @@ export default function Dashboard() {
              label="Ordem de Serviço"
              isCollapsed={isSidebarCollapsed}
              path="/ordem-servico"
-              icon={<Wrench />}
-              label="Ordem de Serviço"
-              isCollapsed={isSidebarCollapsed}
-              path="/ordem-servico"
+            
+    
             />
 
 
-          </nav>
+                      </nav>
 
         </div>
 
@@ -217,13 +216,13 @@ export function DashboardHome() {
         }
 
         const response = await fetch(
-          'http://localhost:3333/api/dashboard/stats',
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
-        );
+  `${API_URL}/api/dashboard/stats`,
+  {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }
+);
 
         if (response.status === 401 || response.status === 403) {
           localStorage.removeItem('@crm:token');
