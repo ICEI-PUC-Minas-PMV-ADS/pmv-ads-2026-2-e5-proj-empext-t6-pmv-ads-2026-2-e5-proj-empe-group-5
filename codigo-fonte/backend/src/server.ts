@@ -43,18 +43,9 @@ app.get('/api/health', (req, res) => {
 // ==========================================
 
 // Cadastro público apenas em desenvolvimento local
-app.post('/api/auth/register', (req, res, next) => {
-  if (
-    process.env.NODE_ENV !== 'development' ||
-    !['localhost', '127.0.0.1'].includes(req.hostname)
-  ) {
-    return res.status(403).json({
-      error: 'Cadastro público disponível apenas no ambiente local de desenvolvimento.',
-    });
-  }
-
-  return Promise.resolve(authController.register(req, res)).catch(next);
-});
+app.post('/api/auth/register', (req, res) =>
+  authController.register(req, res)
+);
 
 app.post('/api/auth/login', (req, res) =>
   authController.login(req, res)
