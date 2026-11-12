@@ -1,29 +1,25 @@
 message: Please cite this software using these metadata.
-title:
+title: E-Maintenance
 authors:
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
+  - family-names: Veloso Moura
+    given-names: Arthur
+  - family-names: Cardoso Nascimento
+    given-names: Fernando  
+  - family-names: Gonçalves Viana
+    given-names: Júlia
+  - family-names: Brenda de Souza
+    given-names: Maria Aparecida
+  - family-names: Nascimento Santos
+    given-names: Moisés
+  - family-names: Oliveira Lemos
+    given-names: Nicolas 
   - name-suffix: Professor
     affiliation: PUC Minas
-    family-names: 
-    given-names: 
-  - name-suffix: Professor
-    affiliation: PUC Minas
-    family-names: 
-    given-names: 
+    family-names: da Costa
+    given-names: José Wilson
 keywords:
-  - 
-  - 
-repository-code: 
+  - sistema de controle de climatização}
+  - processos de manutenção preventiva
+repository-code: https://github.com/ICEI-PUC-Minas-PMV-ADS/pmv-ads-2026-2-e5-proj-empext-t6-pmv-ads-2026-2-e5-proj-empe-group-5
 version: 1.0.0
-date-released: 2023-10-31
+date-released: 2026-11-12
