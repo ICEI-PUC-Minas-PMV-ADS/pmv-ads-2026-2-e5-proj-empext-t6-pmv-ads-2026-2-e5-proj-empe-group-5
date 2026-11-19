@@ -99,10 +99,12 @@
   gap: 15px;
 }
 
-/* CARD CINZA */
+/* CARD RELATÓRIOS */
 
 .card-relatorio {
-  background: #d9d9d9;
+  background: #ffffff;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 
   border-radius: 15px;
 
@@ -219,7 +221,7 @@
 }
 
 .botao-excluir-relatorio:hover {
-  background: #c43e3e;
+  background: #c23c3c;
   transform: translateY(-1px);
 }
 
