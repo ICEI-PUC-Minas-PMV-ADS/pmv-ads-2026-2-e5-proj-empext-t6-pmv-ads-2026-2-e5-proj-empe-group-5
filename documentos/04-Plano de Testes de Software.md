@@ -40,7 +40,7 @@ Apresente os casos de testes utilizados na realização da verificação e valid
 
 | Campo | Descrição |
 |---|---|
-| **Descrição** | Verificar se o sistema permite cadastrar um novo serviço para um cliente em uma data específica. |
+| **Descrição** | Verificar se o sistema permite ir para a pagina de cadastrar novo serviço para um cliente em uma data específica. |
 | **Responsável Caso de Teste** | Maria Souza |
 | **Tipo do Teste** | Sucesso |
 | **Requisitos associados** | RF-008: O sistema deve permitir o agendamento de atendimentos para clientes. |
@@ -167,4 +167,39 @@ Criar casos de teste da etapa 3
 
 
 ### ETAPA 4
-Criar casos de teste da etapa 4
+
+#### CT-001-S — Pesquisa de clientes e serviços na agenda
+
+| Campo | Descrição |
+|---|---|
+| **Descrição** | Verificar se o sistema permite pesquisar cleintes e serviços na agenda. |
+| **Responsável Caso de Teste** | Maria Souza |
+| **Tipo do Teste** | Sucesso |
+| **Requisitos associados** | RF-010: Permitir pesquisar clientes e equipamentos cadastrados no sistem. |
+| **Passos** | 1. Acessar a Agenda.<br>2. Selecionar caixa de pesquisa.<br>3. Digitar o nome ou serviço. |
+| **Dados de teste** | Cliente, serviço, horário ou técnico. |
+| **Critérios de êxito** |O sistema deve mostrar todos os clientes e serviços agendados que coincidem com o que foi digitado pelo usuario. |
+
+#### CT-002-S — Editar e salvar informações de serviço já existentes
+
+| Campo | Descrição |
+|---|---|
+| **Descrição** | Verificar se o sistema edita informaçoes de serviço já existentes diretamente na agenda. |
+| **Responsável Caso de Teste** | Maria Souza |
+| **Tipo do Teste** | Sucesso |
+| **Requisitos associados** | RF-008: Permitir agendamento, editar e excluir atendimentos para clientes. |
+| **Passos** | 1. Acessar a Agenda.<br>2. Selecionar uma data.<br>3. Clicar em editar.<br>4. Clicar em "Salvar". |
+| **Dados de teste** | Cliente, serviço, horário ou técnico. |
+| **Critérios de êxito** | O sistema deve editar todos os campos que foram alterar pelo usuario. |
+
+#### CT-003-S — Excluir informações de serviço já existentes
+
+| Campo | Descrição |
+|---|---|
+| **Descrição** | Verificar se o sistema exclui informaçoes de serviço já existentes diretamente na agenda. |
+| **Responsável Caso de Teste** | Maria Souza |
+| **Tipo do Teste** | Sucesso |
+| **Requisitos associados** | RF-008: Permitir agendamento, editar e excluir atendimentos para clientes. |
+| **Passos** | 1. Acessar a Agenda.<br>2. Selecionar uma data.<br>3. Clicar em excluir.<br>4. Clicar em "Confirmar". |
+| **Dados de teste** | Cliente, serviço, horário ou técnico. |
+| **Critérios de êxito** | O sistema deve excluir a ordem de serviço que o usuario escolher. |
