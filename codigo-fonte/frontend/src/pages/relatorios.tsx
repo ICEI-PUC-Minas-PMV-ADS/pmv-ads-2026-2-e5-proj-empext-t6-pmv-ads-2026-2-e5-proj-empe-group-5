@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Filter, Plus, Pencil, Trash2, X, Save } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../services/api';
 
 import '../relatorios.css';
 
@@ -32,7 +33,7 @@ const formularioVazio: FormularioRelatorio = {
   endereco: '',
 };
 
-const API = 'http://localhost:3333/api/relatorios';
+
 
 export function Relatorios() {
   const navigate = useNavigate();
@@ -66,7 +67,7 @@ export function Relatorios() {
         return;
       }
 
-      const response = await fetch(API, {
+      const response = await fetch(`${API_URL}/api/relatorios`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -162,7 +163,7 @@ export function Relatorios() {
         return;
       }
 
-      const response = await fetch(`${API}/${editando.id}`, {
+      const response = await fetch(`${API_URL}/api/relatorios/${editando.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -209,7 +210,7 @@ export function Relatorios() {
         return;
       }
 
-      const response = await fetch(`${API}/${relatorio.id}`, {
+      const response = await fetch(`${API_URL}/api/relatorios/${relatorio.id}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,

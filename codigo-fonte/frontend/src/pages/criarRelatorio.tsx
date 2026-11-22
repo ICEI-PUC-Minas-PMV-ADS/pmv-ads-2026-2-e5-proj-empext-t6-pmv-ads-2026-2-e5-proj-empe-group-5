@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Save } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../services/api';
 
 import '../relatorios.css';
 
@@ -64,7 +65,7 @@ export function CriarRelatorio() {
       const token = localStorage.getItem('@crm:token');
 
       const response = await fetch(
-        'http://localhost:3333/api/relatorios',
+  `${API_URL}/api/relatorios`,
         {
           method: 'POST',
 
