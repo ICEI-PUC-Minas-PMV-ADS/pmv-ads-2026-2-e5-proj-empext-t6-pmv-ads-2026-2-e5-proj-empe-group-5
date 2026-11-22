@@ -191,3 +191,15 @@ Criar casos de teste da etapa 3
 | **Passos** | 1. Acessar a Agenda.<br>2. Selecionar uma data.<br>3. Clicar em editar.<br>4. Clicar em "Salvar". |
 | **Dados de teste** | Cliente, serviço, horário ou técnico. |
 | **Critérios de êxito** | O sistema deve editar todos os campos que foram alterar pelo usuario. |
+
+#### CT-003-S — Excluir informações de serviço já existentes
+
+| Campo | Descrição |
+|---|---|
+| **Descrição** | Verificar se o sistema exclui informaçoes de serviço já existentes diretamente na agenda. |
+| **Responsável Caso de Teste** | Maria Souza |
+| **Tipo do Teste** | Sucesso |
+| **Requisitos associados** | RF-008: Permitir agendamento, editar e excluir atendimentos para clientes. |
+| **Passos** | 1. Acessar a Agenda.<br>2. Selecionar uma data.<br>3. Clicar em excluir.<br>4. Clicar em "Confirmar". |
+| **Dados de teste** | Cliente, serviço, horário ou técnico. |
+| **Critérios de êxito** | O sistema deve excluir a ordem de serviço que o usuario escolher. |
