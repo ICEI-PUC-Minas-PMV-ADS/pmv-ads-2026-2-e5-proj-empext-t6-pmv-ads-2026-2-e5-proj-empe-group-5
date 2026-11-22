@@ -40,7 +40,7 @@ Apresente os casos de testes utilizados na realização da verificação e valid
 
 | Campo | Descrição |
 |---|---|
-| **Descrição** | Verificar se o sistema permite cadastrar um novo serviço para um cliente em uma data específica. |
+| **Descrição** | Verificar se o sistema permite ir para a pagina de cadastrar novo serviço para um cliente em uma data específica. |
 | **Responsável Caso de Teste** | Maria Souza |
 | **Tipo do Teste** | Sucesso |
 | **Requisitos associados** | RF-008: O sistema deve permitir o agendamento de atendimentos para clientes. |
@@ -167,4 +167,15 @@ Criar casos de teste da etapa 3
 
 
 ### ETAPA 4
-Criar casos de teste da etapa 4
+
+#### CT-001-S — Pesquisa de clientes e serviços na agenda
+
+| Campo | Descrição |
+|---|---|
+| **Descrição** | Verificar se o sistema permite pesquisar cleintes e serviços na agenda. |
+| **Responsável Caso de Teste** | Maria Souza |
+| **Tipo do Teste** | Sucesso |
+| **Requisitos associados** | RF-010: Permitir pesquisar clientes e equipamentos cadastrados no sistem. |
+| **Passos** | 1. Acessar a Agenda.<br>2. Selecionar caixa de pesquisa.<br>3. Digitar o nome ou serviço.<br>. |
+| **Dados de teste** | Cliente, serviço, horário ou técnico. |
+| **Critérios de êxito** |O sistema deve mostrar todos os clientes e serviços agendados que coincidem com o que foi digitado pelo usuario. |
