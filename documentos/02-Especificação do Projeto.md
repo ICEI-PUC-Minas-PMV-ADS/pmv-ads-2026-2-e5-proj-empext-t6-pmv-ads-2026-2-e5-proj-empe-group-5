@@ -48,7 +48,7 @@ Os requisitos classificados como **BAIXA** representam funcionalidades complemen
 | **RF-005** | Permitir o registro das manutenções realizadas nos equipamentos.                 | ALTA       | Etapa 2 | Média        |
 | **RF-006** | Permitir a criação e consulta de ordens de serviço.                              | ALTA       | Etapa 2 | Média        |
 | **RF-007** | Permitir a atualização do status de uma ordem de serviço.                        | ALTA       | Etapa 3 | Baixa        |
-| **RF-008** | Permitir o agendamento de atendimentos para clientes.                            | ALTA       | Etapa 3 | Média        |
+| **RF-008** | Permitir agendar, editar e excluir atendimentos para clientes.                            | ALTA       | Etapa 3 | Média        |
 | **RF-009** | Permitir a consulta do histórico de serviços realizados em cada equipamento.     | ALTA       | Etapa 4 | Média        |
 | **RF-010** | Permitir pesquisar clientes e equipamentos cadastrados no sistema.               | MÉDIA      | Etapa 4 | Baixa        |
 | **RF-011** | Permitir a geração de relatórios dos serviços realizados em determinado período. | MÉDIA      | Etapa 4 | Média        |
