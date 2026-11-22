@@ -180,5 +180,16 @@ CREATE TABLE REGISTRO_SERVICO (
         REFERENCES ORDEM_SERVICO(id_ordem_servico) 
         ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+-- 6. TABELA DE RELATÓRIOS CRIADOS
+CREATE TABLE RELATORIO (
+    id_relatorio INT AUTO_INCREMENT PRIMARY KEY,
+    str_descricao TEXT NOT NULL,
+    str_cliente VARCHAR(100) NOT NULL,
+    str_equipamento VARCHAR(150) NOT NULL,
+    date_data_servico DATE NOT NULL,
+    str_funcionario VARCHAR(100) NOT NULL,
+    str_endereco TEXT NOT NULL
+);
 ```
 
