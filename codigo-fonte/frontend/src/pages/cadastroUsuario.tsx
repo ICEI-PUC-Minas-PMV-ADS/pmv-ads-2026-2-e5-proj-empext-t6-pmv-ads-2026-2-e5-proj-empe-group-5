@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { Wind, User, Mail, Lock, UserPlus } from 'lucide-react';
 import '../login.css';
+import { API_URL } from '../services/api';
 
 export function CadastroUsuario() {
   const [nome, setNome] = useState('');
@@ -32,7 +33,7 @@ export function CadastroUsuario() {
 
     setCarregando(true);
     try {
-      const resposta = await fetch('http://localhost:3333/api/auth/register', {
+      const resposta = await fetch(`${API_URL}/api/auth/register`,  {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nome: nome.trim(), email: email.trim(), senha }),

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import '../cadastroClientes.css';
+import { API_URL } from '../services/api';
 
-const API_URL = 'http://localhost:3333/api';
-
+const API = `${API_URL}/api`;
 interface Cliente {
   id: string;
   nome: string;
@@ -41,7 +41,7 @@ export function CadastroClientes() {
     try {
       const token = localStorage.getItem('@crm:token');
 
-      const response = await fetch(`${API_URL}/clientes`, {
+      const response = await fetch(`${API}/clientes`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -103,8 +103,8 @@ export function CadastroClientes() {
       };
 
       const url = clienteEditandoId
-        ? `${API_URL}/clientes/${clienteEditandoId}`
-        : `${API_URL}/clientes`;
+  ? `${API}/clientes/${clienteEditandoId}`
+  : `${API}/clientes`;
 
       const method = clienteEditandoId ? 'PUT' : 'POST';
 
@@ -145,7 +145,7 @@ export function CadastroClientes() {
       try {
         const token = localStorage.getItem('@crm:token');
 
-        const response = await fetch(`${API_URL}/clientes/${mostrarModalExclusao}`, {
+        const response = await fetch(`${API}/clientes/${mostrarModalExclusao}`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${token}`

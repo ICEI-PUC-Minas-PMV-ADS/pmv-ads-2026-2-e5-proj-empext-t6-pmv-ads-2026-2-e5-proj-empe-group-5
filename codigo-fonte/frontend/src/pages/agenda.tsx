@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 
 import "../agenda.css";
+import { API_URL } from '../services/api';
 
 type Agendamento = {
   id: string;
@@ -56,7 +57,7 @@ type Tecnico = {
   email: string;
 };
 
-const API = 'http://localhost:3333/api';
+const API = `${API_URL}/api`;;
 
 function obterToken(): string {
   return localStorage.getItem('@crm:token') || '';
@@ -154,7 +155,7 @@ export function Agenda() {
 
   const [agendamentos, setAgendamentos] = useState<Agendamento[]>([]);
   const [tecnicos, setTecnicos] = useState<Tecnico[]>([]);
-  const [carregando, setCarregando] = useState(false);
+ const [, setCarregando] = useState(false);
   const [termoBusca, setTermoBusca] = useState('');
 
   const [modalAberto, setModalAberto] = useState(false);

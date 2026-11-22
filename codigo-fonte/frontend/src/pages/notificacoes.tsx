@@ -8,6 +8,8 @@ import {
   CheckCircle2, 
   Clock 
 } from 'lucide-react';
+import { API_URL } from '../services/api';
+
 
 interface ServicoNotificacao {
   id: string;
@@ -37,9 +39,9 @@ export function Notificacoes() {
     async function carregarNotificacoes() {
       try {
         const token = localStorage.getItem('@crm:token');
-        const response = await fetch('http://localhost:3333/api/notificacoes', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const response = await fetch(`${API_URL}/api/notificacoes`, {
+  headers: { Authorization: `Bearer ${token}` }
+});
 
         if (!response.ok) throw new Error('Falha ao buscar notificações.');
 

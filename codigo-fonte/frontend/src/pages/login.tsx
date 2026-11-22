@@ -3,6 +3,7 @@ import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Wind, Mail, Lock, LogIn } from 'lucide-react';
 import '../login.css';
+import { API_URL } from '../services/api';
 
 type RespostaLogin = {
   token?: string;
@@ -30,8 +31,8 @@ export function Login() {
 
     try {
       const resposta = await fetch(
-        'http://localhost:3333/api/auth/login',
-        {
+  `${API_URL}/api/auth/login`,
+  {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

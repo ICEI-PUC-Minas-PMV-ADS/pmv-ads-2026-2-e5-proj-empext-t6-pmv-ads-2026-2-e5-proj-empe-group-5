@@ -13,6 +13,8 @@ import {
 } from 'lucide-react';
 
 import '../ordemServico.css';
+import { API_URL } from '../services/api';
+
 
 type StatusAPI = 'PENDENTE' | 'EM_ANDAMENTO' | 'CONCLUIDO' | 'CANCELADO';
 type TipoOS = 'PREVENTIVA' | 'CORRETIVA';
@@ -59,7 +61,7 @@ type OrdemAPI = {
   tecnico?: Tecnico | null;
 };
 
-const API = 'http://localhost:3333/api';
+const API = `${API_URL}/api`;
 
 function obterToken(): string {
   return localStorage.getItem('@crm:token') || '';
