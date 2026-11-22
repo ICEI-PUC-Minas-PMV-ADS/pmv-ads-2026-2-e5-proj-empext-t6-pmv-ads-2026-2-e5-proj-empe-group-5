@@ -176,6 +176,18 @@ Criar casos de teste da etapa 3
 | **Responsável Caso de Teste** | Maria Souza |
 | **Tipo do Teste** | Sucesso |
 | **Requisitos associados** | RF-010: Permitir pesquisar clientes e equipamentos cadastrados no sistem. |
-| **Passos** | 1. Acessar a Agenda.<br>2. Selecionar caixa de pesquisa.<br>3. Digitar o nome ou serviço.<br>. |
+| **Passos** | 1. Acessar a Agenda.<br>2. Selecionar caixa de pesquisa.<br>3. Digitar o nome ou serviço. |
 | **Dados de teste** | Cliente, serviço, horário ou técnico. |
 | **Critérios de êxito** |O sistema deve mostrar todos os clientes e serviços agendados que coincidem com o que foi digitado pelo usuario. |
+
+#### CT-002-S — Editar e salvar informações de serviço já existentes
+
+| Campo | Descrição |
+|---|---|
+| **Descrição** | Verificar se o sistema edita informaçoes de serviço já existentes diretamente na agenda. |
+| **Responsável Caso de Teste** | Maria Souza |
+| **Tipo do Teste** | Sucesso |
+| **Requisitos associados** | RF-008: Permitir agendamento, editar e excluir atendimentos para clientes. |
+| **Passos** | 1. Acessar a Agenda.<br>2. Selecionar uma data.<br>3. Clicar em editar.<br>4. Clicar em "Salvar". |
+| **Dados de teste** | Cliente, serviço, horário ou técnico. |
+| **Critérios de êxito** | O sistema deve editar todos os campos que foram alterar pelo usuario. |
