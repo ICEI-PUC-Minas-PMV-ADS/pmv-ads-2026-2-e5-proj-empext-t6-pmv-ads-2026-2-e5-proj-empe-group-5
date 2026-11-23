@@ -46,19 +46,27 @@ A fim de aumentar a qualidade da aplicação desenvolvida, cada funcionalidade d
 
 
 
-**Responsável pela execução:** Júlia Gonçalves
+**Responsável pela execução dos testes: Moisés Nascimento** 
 
-**Escopo de teste:** Validação das interfaces desenvolvidas por Moisés 
+**Escopo de teste:** Validação das interfaces desenvolvidas por Julia Gonçãlves
 
 <table>
   <tr>
-    <th colspan="6" width="1000">CT-001-S — Criação, edição, listagem e exclusão de relatórios (Tester: Júlia Gonçalves)<br></th>
+    <th colspan="6" width="1000">Caso de Teste 1: Registo, Edição e Exclusão de Clientes (Tester: Moisés Nascimento)<br></th>
   </tr>
   
   <tr>
     <td colspan="6" align="center"><strong>Evidência</strong></td>
   </tr>
   <tr>
-    <td colspan="6" align="center"><video src="https://github.com/user-attachments/assets/5379bb1f-de2a-49dd-a675-ad4c1c212cc8"/></td>
+    <td colspan="6" align="center"><video src="https://github.com/user-attachments/assets/51dde37e-004b-4e35-ab05-732384fce5b2"/></td>
   </tr>
 </table>
+
+
+**Testes responsável: Moisés Nascimento** 
+
+**Escopo de teste:** Validação das interfaces desenvolvidas por Júlia Gonçalves
+
+
+
