@@ -43,3 +43,22 @@ A fim de aumentar a qualidade da aplicação desenvolvida, cada funcionalidade d
     <td colspan="6" align="center"><video src="https://github.com/user-attachments/assets/94583743-0b84-42f4-bfdf-e4a44345d033"/></td>
   </tr>
 </table>
+
+
+
+**Responsável pela execução:** Júlia Gonçalves
+
+**Escopo de teste:** Validação das interfaces desenvolvidas por Moisés 
+
+<table>
+  <tr>
+    <th colspan="6" width="1000">CT-001-S — Criação, edição, listagem e exclusão de relatórios (Tester: Júlia Gonçalves)<br></th>
+  </tr>
+  
+  <tr>
+    <td colspan="6" align="center"><strong>Evidência</strong></td>
+  </tr>
+  <tr>
+    <td colspan="6" align="center"><video src="https://github.com/user-attachments/assets/5379bb1f-de2a-49dd-a675-ad4c1c212cc8"/></td>
+  </tr>
+</table>
