@@ -114,6 +114,11 @@ Criar casos de teste da etapa 3
 | **Dados de teste** | - **Novo Cliente:** Nome: "Empresa Exemplo", Email: "contacto@exemplo.com", Telefone: "31999998888", CPF/CNPJ: "12.345.678/0001-90".<br>- **Edição:** Telefone alterado para "31988887777". |
 | **Critérios de êxito** | O sistema deve responder com status 201 Created no registo, 200 OK na atualização e 204 No Content na eliminação, atualizando a lista na interface em tempo real e sem erros na consola. |
 
+
+
+
+
+
 ####  Caso de Teste de Insucesso
 
 #### CT-002-I — Falha de Conexão no Carregamento da Dashboard
@@ -203,3 +208,16 @@ Criar casos de teste da etapa 3
 | **Passos** | 1. Acessar a Agenda.<br>2. Selecionar uma data.<br>3. Clicar em excluir.<br>4. Clicar em "Confirmar". |
 | **Dados de teste** | Cliente, serviço, horário ou técnico. |
 | **Critérios de êxito** | O sistema deve excluir a ordem de serviço que o usuario escolher. |
+
+
+#### CT-010-S — Visualização e Carregamento de Métricas na Dashboard
+
+| Campo | Descrição |
+|---|---|
+| **Descrição** | Este caso de teste verifica se a página Dashboard carrega e exibe corretamente os indicadores gerais e os agendamentos ao aceder com um utilizador autenticado.|
+| **Responsável Caso de Teste** | Nicolas Oliveira |
+| **Tipo do Teste** | Sucesso |
+| **Requisitos associados** | RF-002: O sistema deve exibir um painel com o resumo de indicadores (clientes, OS, agendamentos) e lista de serviços recentes. |
+| **Passos** | 1. Fazer login no sistema com credenciais válidas.<br>2. Ser redirecionado ou navegar para a página principal (Dashboard /).<br>3. Aguardar o carregamento das requisições de API (/api/dashboard/stats).<br>4. Verificar a exibição dos cards informativos e da tabela de agendamentos.<br>|
+| **Dados de teste** | - Token de Autenticação: Token JWT válido salvo no localStorage (@crm:token)<br>- Utilizador: admin@empresa.com<br>- Dados na Base de Dados: Múltiplas OS com status CONCLUIDO, EM_ANDAMENTO e clientes ativos.<br> |
+| **Critérios de êxito** | O sistema deve responder com status 200 OK na API, remover os estados de carregamento (...) e exibir os contadores atualizados e a lista dos próximos serviços sem erros no consola.|
