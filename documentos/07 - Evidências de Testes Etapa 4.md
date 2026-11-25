@@ -70,3 +70,30 @@ A fim de aumentar a qualidade da aplicação desenvolvida, cada funcionalidade d
 
 
 
+<table>
+  <tr>
+    <th colspan="6" width="1000">CT-010<br>Visualização e Carregamento de Métricas na Dashboard =</th>
+  </tr>
+  <tr>
+    <td width="170"><strong>Critérios de êxito</strong></td>
+    <td colspan="5">O sistema deve responder com status OK na API, remover os estados de carregamento (...) e exibir os contadores atualizados e a lista dos próximos serviços sem erros na consola.</td>
+  </tr>
+    <tr>
+      <td><strong>Responsável pela funcionalidade</strong></td>
+    <td width="430">Nicolas </td>
+      <td><strong>Responsável pelo teste</strong></td>
+    <td width="430">Fernando </td>
+     <td width="100"><strong>Data do teste</strong></td>
+    <td width="150">20/11/2026</td>
+  </tr>
+    <tr>
+    <td width="170"><strong>Comentário</strong></td>
+    <td colspan="5">O dashboard está funcionando corretamente.</td>
+  </tr>
+  <tr>
+    <td colspan="6" align="center"><strong>Evidência</strong></td>
+  </tr>
+  <tr>
+    <td colspan="6" align="center"><video src="https://github.com/user-attachments/assets/0e26978e-9eb4-408b-9221-4ef4b601f11d"/></td>
+  </tr>
+</table>
